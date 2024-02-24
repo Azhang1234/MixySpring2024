@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "mixy2024" "\0"
+            VALUE "FileDescription", "mixy_demo" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "mixy2024" "\0"
+            VALUE "InternalName", "mixy_demo" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "mixy2024.exe" "\0"
-            VALUE "ProductName", "mixy2024" "\0"
+            VALUE "OriginalFilename", "mixy_demo.exe" "\0"
+            VALUE "ProductName", "mixy_demo" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

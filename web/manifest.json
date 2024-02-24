@@ -1,6 +1,6 @@
 {
-    "name": "mixy2024",
-    "short_name": "mixy2024",
+    "name": "mixy_demo",
+    "short_name": "mixy_demo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
