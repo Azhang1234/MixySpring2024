@@ -1,4 +1,4 @@
-# mixy2024
+# mixy_demo
 
 A new Flutter project.
 
