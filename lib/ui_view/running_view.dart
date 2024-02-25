@@ -70,7 +70,7 @@ class RunningView extends StatelessWidget {
                                           top: 16,
                                         ),
                                         child: Text(
-                                          "You're doing great!",
+                                          "Taste Profile",
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                             fontFamily:
@@ -93,7 +93,7 @@ class RunningView extends StatelessWidget {
                                       right: 16,
                                     ),
                                     child: Text(
-                                      "Keep it up\nand stick to your plan!",
+                                      "Rate this drink!",
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontFamily: FitnessAppTheme.fontName,
@@ -112,12 +112,12 @@ class RunningView extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        top: -16,
-                        left: 0,
+                        top: 23,
+                        left: 10,
                         child: SizedBox(
-                          width: 110,
-                          height: 110,
-                          child: Image.asset("assets/fitness_app/runner.png"),
+                          width: 60,
+                          height: 60,
+                          child: Image.asset("assets/fitness_app/mixyLogo.png"),
                         ),
                       )
                     ],
