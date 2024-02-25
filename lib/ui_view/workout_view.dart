@@ -40,14 +40,14 @@ class WorkoutView extends StatelessWidget {
                         blurRadius: 10.0),
                   ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(16.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Text(
-                        'Next workout',
+                      Text(
+                        'Current Drink',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontFamily: FitnessAppTheme.fontName,
@@ -57,10 +57,10 @@ class WorkoutView extends StatelessWidget {
                           color: FitnessAppTheme.white,
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(top: 8.0),
                         child: Text(
-                          'Legs Toning and\nGlutes Workout at Home',
+                          'Vodka Sprite',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontFamily: FitnessAppTheme.fontName,
@@ -71,16 +71,16 @@ class WorkoutView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 32,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 4),
+                        padding: EdgeInsets.only(right: 4),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(left: 4),
                               child: Icon(
                                 Icons.timer,
@@ -88,7 +88,7 @@ class WorkoutView extends StatelessWidget {
                                 size: 16,
                               ),
                             ),
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(left: 4.0),
                               child: Text(
                                 '68 min',
@@ -102,10 +102,10 @@ class WorkoutView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const Expanded(
+                            Expanded(
                               child: SizedBox(),
                             ),
-                            Container(
+                            /*Container(
                               decoration: BoxDecoration(
                                 color: FitnessAppTheme.nearlyWhite,
                                 shape: BoxShape.circle,
@@ -125,7 +125,7 @@ class WorkoutView extends StatelessWidget {
                                   size: 44,
                                 ),
                               ),
-                            )
+                            )*/
                           ],
                         ),
                       )

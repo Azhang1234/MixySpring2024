@@ -60,9 +60,9 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
   void addAllListData() {
     const int count = 9;
 
-    listViews.add(
+    /*listViews.add(
       TitleView(
-        titleTxt: 'Mediterranean diet',
+        titleTxt: 'Mixing Station',
         subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -79,10 +79,10 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                 const Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController!,
       ),
-    );
+    );*/
     listViews.add(
       TitleView(
-        titleTxt: 'Meals today',
+        titleTxt: 'Selected Ingredients',
         subTxt: 'Customize',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -105,8 +105,8 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Body measurement',
-        subTxt: 'Today',
+        titleTxt: 'Drink Recommendations',
+        subTxt: 'Instructions',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve:
@@ -125,27 +125,15 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
       ),
     );
     listViews.add(
-      TitleView(
-        titleTxt: 'Water',
-        subTxt: 'Aqua SmartBottle',
+      BodyMeasurementView(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve:
-                const Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn))),
+                const Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController!,
       ),
     );
 
-    listViews.add(
-      WaterView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: const Interval((1 / count) * 7, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController!,
-      ),
-    );
     listViews.add(
       GlassView(
           animation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -251,12 +239,12 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'My Diary',
+                                  'Ingredient Cabinet',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontFamily: FitnessAppTheme.fontName,
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 22 + 6 - 6 * topBarOpacity,
+                                    fontSize: 22 - 6 * topBarOpacity,
                                     letterSpacing: 1.2,
                                     color: FitnessAppTheme.darkerText,
                                   ),
