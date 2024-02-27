@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "408707912486",
+    "project_id": "mixyspring2024",
+    "storage_bucket": "mixyspring2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408707912486:android:d7619fbb831ee0d39067e7",
+        "android_client_info": {
+          "package_name": "com.example.mixy_demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfz2iNbuIoZLFQ9Rz5hC4O1iI3vz4olE4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
