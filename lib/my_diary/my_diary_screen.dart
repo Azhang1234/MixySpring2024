@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mixyspring2024/fitness_app_theme.dart';
+import 'package:mixyspring2024/mixy_app_theme.dart';
 import 'package:mixyspring2024/my_diary/water_view.dart';
 import 'package:mixyspring2024/ui_view/body_measurement.dart';
 import 'package:mixyspring2024/ui_view/glass_view.dart';
@@ -153,7 +153,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: FitnessAppTheme.background,
+      color: MixyAppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -209,13 +209,13 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                     0.0, 30 * (1.0 - topBarAnimation!.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(topBarOpacity),
+                    color: MixyAppTheme.white.withOpacity(topBarOpacity),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(32.0),
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: FitnessAppTheme.grey
+                          color: MixyAppTheme.grey
                               .withOpacity(0.4 * topBarOpacity),
                           offset: const Offset(1.1, 1.1),
                           blurRadius: 10.0),
@@ -242,11 +242,11 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                   'Ingredient Cabinet',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontFamily: MixyAppTheme.fontName,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 22 - 6 * topBarOpacity,
                                     letterSpacing: 1.2,
-                                    color: FitnessAppTheme.darkerText,
+                                    color: MixyAppTheme.darkerText,
                                   ),
                                 ),
                               ),
@@ -262,7 +262,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                 child: const Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_left,
-                                    color: FitnessAppTheme.grey,
+                                    color: MixyAppTheme.grey,
                                   ),
                                 ),
                               ),
@@ -278,7 +278,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                     padding: EdgeInsets.only(right: 8),
                                     child: Icon(
                                       Icons.calendar_today,
-                                      color: FitnessAppTheme.grey,
+                                      color: MixyAppTheme.grey,
                                       size: 18,
                                     ),
                                   ),
@@ -286,11 +286,11 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                     '15 May',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                      fontFamily: FitnessAppTheme.fontName,
+                                      fontFamily: MixyAppTheme.fontName,
                                       fontWeight: FontWeight.normal,
                                       fontSize: 18,
                                       letterSpacing: -0.2,
-                                      color: FitnessAppTheme.darkerText,
+                                      color: MixyAppTheme.darkerText,
                                     ),
                                   ),
                                 ],
@@ -307,7 +307,7 @@ class _MyDiaryScreenState extends State<MyDiaryScreen>
                                 child: const Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_right,
-                                    color: FitnessAppTheme.grey,
+                                    color: MixyAppTheme.grey,
                                   ),
                                 ),
                               ),
