@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mixyspring2024/main.dart';
 
-import '../fitness_app_theme.dart';
+import '../mixy_app_theme.dart';
 
 class GlassView extends StatelessWidget {
   final AnimationController? animationController;
@@ -39,7 +39,7 @@ class GlassView extends StatelessWidget {
                                 topRight: Radius.circular(8.0)),
                             // boxShadow: <BoxShadow>[
                             //   BoxShadow(
-                            //       color: FitnessAppTheme.grey.withOpacity(0.2),
+                            //       color: MixyAppTheme.grey.withOpacity(0.2),
                             //       offset: Offset(1.1, 1.1),
                             //       blurRadius: 10.0),
                             // ],
@@ -53,11 +53,11 @@ class GlassView extends StatelessWidget {
                                   'Make sure you drink water consistently!',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontFamily: MixyAppTheme.fontName,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 14,
                                     letterSpacing: 0.0,
-                                    color: FitnessAppTheme.nearlyDarkBlue
+                                    color: MixyAppTheme.nearlyDarkBlue
                                         .withOpacity(0.6),
                                   ),
                                 ),
@@ -72,7 +72,7 @@ class GlassView extends StatelessWidget {
                         child: SizedBox(
                           width: 80,
                           height: 80,
-                          child: Image.asset("assets/fitness_app/glass.png"),
+                          child: Image.asset("assets/mixy_app/glass.png"),
                         ),
                       )
                     ],

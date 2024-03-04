@@ -4,7 +4,7 @@ import 'package:mixyspring2024/ui_view/running_view.dart';
 import 'package:mixyspring2024/ui_view/title_view.dart';
 import 'package:mixyspring2024/ui_view/workout_view.dart';
 
-import '../fitness_app_theme.dart';
+import '../mixy_app_theme.dart';
 
 class TrainingScreen extends StatefulWidget {
   const TrainingScreen({Key? key, this.animationController}) : super(key: key);
@@ -121,7 +121,7 @@ class _TrainingScreenState extends State<TrainingScreen>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: FitnessAppTheme.background,
+      color: MixyAppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -177,13 +177,13 @@ class _TrainingScreenState extends State<TrainingScreen>
                     0.0, 30 * (1.0 - topBarAnimation!.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: FitnessAppTheme.white.withOpacity(topBarOpacity),
+                    color: MixyAppTheme.white.withOpacity(topBarOpacity),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(32.0),
                     ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: FitnessAppTheme.grey
+                          color: MixyAppTheme.grey
                               .withOpacity(0.4 * topBarOpacity),
                           offset: const Offset(1.1, 1.1),
                           blurRadius: 10.0),
@@ -210,11 +210,11 @@ class _TrainingScreenState extends State<TrainingScreen>
                                   'Mixing Station',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontFamily: FitnessAppTheme.fontName,
+                                    fontFamily: MixyAppTheme.fontName,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 22 - 6 * topBarOpacity,
                                     letterSpacing: 1.2,
-                                    color: FitnessAppTheme.darkerText,
+                                    color: MixyAppTheme.darkerText,
                                   ),
                                 ),
                               ),
@@ -230,7 +230,7 @@ class _TrainingScreenState extends State<TrainingScreen>
                                 child: const Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_left,
-                                    color: FitnessAppTheme.grey,
+                                    color: MixyAppTheme.grey,
                                   ),
                                 ),
                               ),
@@ -246,7 +246,7 @@ class _TrainingScreenState extends State<TrainingScreen>
                                     padding: EdgeInsets.only(right: 8),
                                     child: Icon(
                                       Icons.calendar_today,
-                                      color: FitnessAppTheme.grey,
+                                      color: MixyAppTheme.grey,
                                       size: 18,
                                     ),
                                   ),
@@ -254,11 +254,11 @@ class _TrainingScreenState extends State<TrainingScreen>
                                     '15 May',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
-                                      fontFamily: FitnessAppTheme.fontName,
+                                      fontFamily: MixyAppTheme.fontName,
                                       fontWeight: FontWeight.normal,
                                       fontSize: 18,
                                       letterSpacing: -0.2,
-                                      color: FitnessAppTheme.darkerText,
+                                      color: MixyAppTheme.darkerText,
                                     ),
                                   ),
                                 ],
@@ -275,7 +275,7 @@ class _TrainingScreenState extends State<TrainingScreen>
                                 child: const Center(
                                   child: Icon(
                                     Icons.keyboard_arrow_right,
-                                    color: FitnessAppTheme.grey,
+                                    color: MixyAppTheme.grey,
                                   ),
                                 ),
                               ),
