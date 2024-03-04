@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'mixy_app_theme.dart';
 import 'models/tabIcon_data.dart';
-import 'my_diary/my_diary_screen.dart';
-import 'training/training_screen.dart';
+import 'ingredient/ingredient_screen.dart';
+import 'mixing/mixing_screen.dart';
 import 'community/community_screen.dart';
 
-class FitnessAppHomeScreen extends StatefulWidget {
-  const FitnessAppHomeScreen({super.key});
+class MixyAppHomeScreen extends StatefulWidget {
+  const MixyAppHomeScreen({super.key});
 
   @override
-  _FitnessAppHomeScreenState createState() => _FitnessAppHomeScreenState();
+  _MixyAppHomeScreenState createState() => _MixyAppHomeScreenState();
 }
 
-class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
+class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
 
@@ -32,7 +32,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = MyDiaryScreen(animationController: animationController);
+    tabBody = IngredientScreen(animationController: animationController);
     super.initState();
   }
 
@@ -89,7 +89,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                 }
                 setState(() {
                   tabBody =
-                      MyDiaryScreen(animationController: animationController);
+                      IngredientScreen(animationController: animationController);
                 });
               });
             } else if (index == 1) {
@@ -99,7 +99,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                 }
                 setState(() {
                   tabBody =
-                      TrainingScreen(animationController: animationController);
+                      MixingScreen(animationController: animationController);
                 });
               });
             } else if (index == 2) {
@@ -119,7 +119,7 @@ class _FitnessAppHomeScreenState extends State<FitnessAppHomeScreen>
                 }
                 setState(() {
                   tabBody =
-                      TrainingScreen(animationController: animationController);
+                      MixingScreen(animationController: animationController);
                 });
               });
             }

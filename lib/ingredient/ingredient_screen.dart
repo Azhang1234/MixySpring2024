@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:mixyspring2024/ui_view/area_list_view.dart';
-import 'package:mixyspring2024/ui_view/running_view.dart';
-import 'package:mixyspring2024/ui_view/title_view.dart';
-import 'package:mixyspring2024/ui_view/workout_view.dart';
+import 'package:mixyspring2024/mixy_app_theme.dart';
+import 'package:mixyspring2024/ingredient/water_view.dart';
+import 'package:mixyspring2024/ui_view/body_measurement.dart';
+import 'package:mixyspring2024/ui_view/glass_view.dart';
+import 'package:mixyspring2024/ui_view/mediterranean_diet_view.dart';
 
-import '../mixy_app_theme.dart';
+import '../ui_view/title_view.dart';
+import 'meals_list_view.dart';
 
-class TrainingScreen extends StatefulWidget {
-  const TrainingScreen({Key? key, this.animationController}) : super(key: key);
+class IngredientScreen extends StatefulWidget {
+  const IngredientScreen({Key? key, this.animationController}) : super(key: key);
 
   final AnimationController? animationController;
   @override
-  _TrainingScreenState createState() => _TrainingScreenState();
+  _IngredientScreenState createState() => _IngredientScreenState();
 }
 
-class _TrainingScreenState extends State<TrainingScreen>
+class _IngredientScreenState extends State<IngredientScreen>
     with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
 
@@ -56,11 +58,11 @@ class _TrainingScreenState extends State<TrainingScreen>
   }
 
   void addAllListData() {
-    const int count = 5;
+    const int count = 9;
 
-    listViews.add(
+    /*listViews.add(
       TitleView(
-        titleTxt: 'Your program',
+        titleTxt: 'Mixing Station',
         subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -69,9 +71,19 @@ class _TrainingScreenState extends State<TrainingScreen>
         animationController: widget.animationController!,
       ),
     );
-
     listViews.add(
-      WorkoutView(
+      MediterranesnDietView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController!,
+            curve:
+                const Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController!,
+      ),
+    );*/
+    listViews.add(
+      TitleView(
+        titleTxt: 'Selected Ingredients',
+        subTxt: 'Customize',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve:
@@ -79,20 +91,22 @@ class _TrainingScreenState extends State<TrainingScreen>
         animationController: widget.animationController!,
       ),
     );
+
     listViews.add(
-      RunningView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController!,
-            curve:
-                const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController!,
+      MealsListView(
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController!,
+                curve: const Interval((1 / count) * 3, 1.0,
+                    curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController,
       ),
     );
 
     listViews.add(
       TitleView(
-        titleTxt: 'Featured Ingredients',
-        subTxt: 'more',
+        titleTxt: 'Drink Recommendations',
+        subTxt: 'Instructions',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve:
@@ -102,14 +116,32 @@ class _TrainingScreenState extends State<TrainingScreen>
     );
 
     listViews.add(
-      AreaListView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: const Interval((1 / count) * 5, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController!,
+      BodyMeasurementView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController!,
+            curve:
+                const Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController!,
       ),
+    );
+    listViews.add(
+      BodyMeasurementView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController!,
+            curve:
+                const Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController!,
+      ),
+    );
+
+    listViews.add(
+      GlassView(
+          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+              CurvedAnimation(
+                  parent: widget.animationController!,
+                  curve: const Interval((1 / count) * 8, 1.0,
+                      curve: Curves.fastOutSlowIn))),
+          animationController: widget.animationController!),
     );
   }
 
@@ -207,7 +239,7 @@ class _TrainingScreenState extends State<TrainingScreen>
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'Mixing Station',
+                                  'Ingredient Cabinet',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontFamily: MixyAppTheme.fontName,
