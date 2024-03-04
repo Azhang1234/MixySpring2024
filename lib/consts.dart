@@ -1,0 +1,1 @@
+const OPENAI_API_KEY = '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';
