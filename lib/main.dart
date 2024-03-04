@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const FitnessAppHomeScreen(), // Directly using it as the home screen
+      home: const MixyAppHomeScreen(), // Directly using it as the home screen
     );
   }
 }

@@ -60,7 +60,7 @@ class _CommunityScreenState extends State<CommunityScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'What are people drinking?',
+        titleTxt: 'What\'s Hot?',
         subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -91,7 +91,7 @@ class _CommunityScreenState extends State<CommunityScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Featured Ingredients',
+        titleTxt: 'Weekly Challenges',
         subTxt: 'more',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
