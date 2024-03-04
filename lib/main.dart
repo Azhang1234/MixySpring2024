@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'fitness_app_home_screen.dart';
+import 'mixy_app_home_screen.dart';
 
 // void main() {
 //   runApp(
