@@ -40,6 +40,7 @@ dependencies:
   country_picker: ^2.0.24
   motion_toast: ^2.8.0
   fluttertoast: ^8.2.4
+  supabase_auth_ui: ^0.4.3
 
 dev_dependencies:
   flutter_test:

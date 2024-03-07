@@ -1,13 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mixyspring2024/firebase_options.dart';
-import 'package:mixyspring2024/user_auth/auth_main.dart';
-import 'package:mixyspring2024/user_auth/view/auth_screens.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'fitness_app_theme.dart';
 import 'models/tabIcon_data.dart';
 import 'my_diary/my_diary_screen.dart';
 import 'training/training_screen.dart';
+import 'user_auth/auth_main.dart';
 
 class FitnessAppHomeScreen extends StatefulWidget {
   const FitnessAppHomeScreen({super.key});
