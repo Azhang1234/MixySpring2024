@@ -6,6 +6,7 @@ import 'ingredient/ingredient_screen.dart';
 import 'mixing/mixing_screen.dart';
 import 'community/community_screen.dart';
 import 'user_profile/user_profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MixyAppHomeScreen extends StatefulWidget {
   const MixyAppHomeScreen({super.key});
@@ -17,6 +18,7 @@ class MixyAppHomeScreen extends StatefulWidget {
 class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
+  final FirebaseAuth _auth = FirebaseAuth.instance; // Create FirebaseAuth instance
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
@@ -29,6 +31,7 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     for (var tab in tabIconsList) {
       tab.isSelected = false;
     }
+    
     tabIconsList[0].isSelected = true;
 
     animationController = AnimationController(
@@ -37,6 +40,22 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     super.initState();
   }
 
+  Future<void> _signIn(String email, String password) async {
+    try {
+      // Sign in user with email and password
+      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
+  
   @override
   void dispose() {
     animationController?.dispose();

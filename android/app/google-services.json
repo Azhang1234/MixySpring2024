@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "496142997358",
+    "project_id": "mixy2024-5dcf8",
+    "storage_bucket": "mixy2024-5dcf8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496142997358:android:5b9ea88f2b804cd4bc537f",
+        "android_client_info": {
+          "package_name": "com.example.mixy_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "496142997358-d5j7tpim83r9ppikndb1io034vvdjg4f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrTNxodR3ENOyiUzHIxGBxVMoM5mOFkBs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "496142997358-d5j7tpim83r9ppikndb1io034vvdjg4f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "496142997358-6m71vi8kfspov65bk782qab01giklq3c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mixyDemo.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
