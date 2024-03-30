@@ -7,6 +7,7 @@ import 'mixing/mixing_screen.dart';
 import 'community/community_screen.dart';
 import 'user_profile/user_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'add_button/add_button_screen.dart';
 
 class MixyAppHomeScreen extends StatefulWidget {
   const MixyAppHomeScreen({super.key});
@@ -100,7 +101,17 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
         ),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            animationController?.reverse().then<dynamic>((data) {
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                tabBody =
+                    AddButtonScreen(animationController: animationController);
+              });
+            });
+          },
           changeIndex: (int index) {
             if (index == 0) {
               animationController?.reverse().then<dynamic>((data) {
