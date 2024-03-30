@@ -8,7 +8,6 @@ import 'package:mixyspring2024/ui_view/mediterranean_diet_view.dart';
 import '../ui_view/title_view.dart';
 import 'meals_list_view.dart';
 
-//ingredient_screen.dart
 class IngredientScreen extends StatefulWidget {
   const IngredientScreen({Key? key, this.animationController})
       : super(key: key);
