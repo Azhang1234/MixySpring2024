@@ -156,7 +156,7 @@ class _BottomBarViewState extends State<BottomBarView>
                               blurRadius: 16.0),
                         ],
                       ),
-                      child: Material(
+                      child: Material( // THIS IS THE PLUS BUTTON MATERIAL CHILD
                         color: Colors.transparent,
                         child: InkWell(
                           splashColor: Colors.white.withOpacity(0.1),
