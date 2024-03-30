@@ -17,10 +17,12 @@ class _AreaListViewState extends State<AreaListView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
   List<String> areaListData = <String>[
+    'assets/mixy_app/snack.png',
     'assets/mixy_app/mixyLogo.png',
     'assets/mixy_app/mixyLogo.png',
     'assets/mixy_app/mixyLogo.png',
-    'assets/mixy_app/mixyLogo.png',
+    'assets/mixy_app/runner.png',
+    'assets/mixy_app/snack.png'
   ];
 
   @override
@@ -56,7 +58,7 @@ class _AreaListViewState extends State<AreaListView>
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                    crossAxisCount: 3,
                     mainAxisSpacing: 24.0,
                     crossAxisSpacing: 24.0,
                     childAspectRatio: 1.0,
@@ -78,6 +80,7 @@ class _AreaListViewState extends State<AreaListView>
                         imagepath: areaListData[index],
                         animation: animation,
                         animationController: animationController!,
+                        index: index,
                       );
                     },
                   ),
@@ -97,11 +100,13 @@ class AreaView extends StatelessWidget {
     this.imagepath,
     this.animationController,
     this.animation,
+    required this.index,
   }) : super(key: key);
 
   final String? imagepath;
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +141,7 @@ class AreaView extends StatelessWidget {
                   hoverColor: Colors.transparent,
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   splashColor: MixyAppTheme.nearlyDarkBlue.withOpacity(0.2),
-                  onTap: () {print('Test2');},
+                  onTap: () {print('Item $index was tapped!');},
                   child: Column(
                     children: <Widget>[
                       Padding(
@@ -155,3 +160,4 @@ class AreaView extends StatelessWidget {
     );
   }
 }
+
