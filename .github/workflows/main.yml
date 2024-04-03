@@ -35,6 +35,11 @@ jobs:
     
     # Build apk.
     - run: flutter build apk --release
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+        APP_ID: ${{ secrets.APP_ID }}
+        SENDER_ID: ${{ secrets.SENDER_ID }}
+        PROJECT_ID: ${{ secrets.PROJECT_ID }}
     - run: flutter build apk --split-per-abi
 
     # Upload generated apk to the artifacts.
