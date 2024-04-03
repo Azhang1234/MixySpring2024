@@ -12,16 +12,16 @@ class _SignInScreenState extends State<SignInScreen> {
   String _email = '';
   String _password = '';
 
-  Future<void> _signIn() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      try {
-        await _auth.signInWithEmailAndPassword(email: _email, password: _password);
-      } on FirebaseAuthException catch (e) {
-        print(e.message); // TODO: Show a dialog or a snackbar with the error message
-      }
+Future<void> _signIn() async {
+  if (_formKey.currentState!.validate()) {
+    _formKey.currentState!.save();
+    try {
+      await _auth.signInWithEmailAndPassword(email: _email, password: _password);
+    } on FirebaseAuthException catch (e) {
+      print(e.message); // TODO: Show a dialog or a snackbar with the error message
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +47,10 @@ class _SignInScreenState extends State<SignInScreen> {
               ElevatedButton(
                 onPressed: _signIn,
                 child: const Text('Sign In'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/signup'),
+                child: const Text('Sign Up'),
               ),
             ],
           ),
