@@ -1,7 +1,5 @@
 name: main
 
-# This workflow is triggered on pushes to the repository.
-
 on:
   push:
     branches:
@@ -9,35 +7,41 @@ on:
   pull_request:
     branches:
     - main
-# on: push    # Default will running for every branch.
     
 jobs:
   build:
-    # This job will run on windows virtual machine
     runs-on: windows-latest
     steps:
     
-    # Setup Java environment in order to build the Android app.
     - uses: actions/checkout@v1
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
     
-    # Setup the flutter environment.
     - uses: subosito/flutter-action@v1
       with:
         channel: 'stable'
         flutter-version: '3.16.9' 
     
-    # Get flutter dependencies.
     - run: flutter clean
     - run: flutter pub get
-    
-    # Build apk.
+
+    - name: Create .env file
+      run: |
+        echo "_KEY=${{ secrets.API_KEY }}" >> .env
+        echo "APP_ID=${{ secrets.APP_ID }}" >> .env
+        echo "SENDER_ID=${{ secrets.SENDER_ID }}" >> .env
+        echo "PROJECT_ID=${{ secrets.PROJECT_ID }}" >> .env
+
     - run: flutter build apk --release
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
+        APP_ID: ${{ secrets.APP_ID }}
+        SENDER_ID: ${{ secrets.SENDER_ID }}
+        PROJECT_ID: ${{ secrets.PROJECT_ID }}
+        
     - run: flutter build apk --split-per-abi
 
-    # Upload generated apk to the artifacts.
     - uses: actions/upload-artifact@v1
       with:
         name: release-apk

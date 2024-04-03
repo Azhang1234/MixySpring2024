@@ -5,7 +5,9 @@ import 'models/tabIcon_data.dart';
 import 'ingredient/ingredient_screen.dart';
 import 'mixing/mixing_screen.dart';
 import 'community/community_screen.dart';
-import 'userScreen/user_profile_screen.dart';
+import 'user_profile/user_profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'add_button/add_button_screen.dart';
 
 class MixyAppHomeScreen extends StatefulWidget {
   const MixyAppHomeScreen({super.key});
@@ -17,6 +19,7 @@ class MixyAppHomeScreen extends StatefulWidget {
 class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
@@ -29,6 +32,7 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     for (var tab in tabIconsList) {
       tab.isSelected = false;
     }
+
     tabIconsList[0].isSelected = true;
 
     animationController = AnimationController(
@@ -81,7 +85,17 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
         ),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            animationController?.reverse().then<dynamic>((data) {
+              if (!mounted) {
+                return;
+              }
+              setState(() {
+                tabBody =
+                    AddButtonScreen(animationController: animationController);
+              });
+            });
+          },
           changeIndex: (int index) {
             if (index == 0) {
               animationController?.reverse().then<dynamic>((data) {

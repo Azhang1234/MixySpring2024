@@ -1,40 +1,57 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'signin.dart';
+import 'signup.dart';
 import 'mixy_app_home_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-// void main() {
-//   runApp(
-//     MaterialApp(
-//       home: Scaffold(
-//         backgroundColor: Colors.blueGrey,
-//         appBar: AppBar(
-//           title: Text('I am Rich'),
-//           backgroundColor: Colors.blueGrey[900],
-//         ),
-//         body: Center(
-//           child: Image(
-//             image: NetworkImage(
-//                 'https://www.imgacademy.com/sites/default/files/july2023timelinephoto.jpg'),
-//           ),
-//         ),
-//       ),
-//     ),
-//   );
-// }
-void main() => runApp(const MyApp());
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
+
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: dotenv.env['API_KEY']!,
+      appId: dotenv.env['APP_ID']!,
+      messagingSenderId: dotenv.env['SENDER_ID']!,
+      projectId: dotenv.env['PROJECT_ID']!,
+  )
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({Key? key}) : super(key: key);
+  final FirebaseAuth _auth = FirebaseAuth.instance; // Create FirebaseAuth instance
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fitness App',
+      title: 'Mixy App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MixyAppHomeScreen(), // Directly using it as the home screen
+      home: StreamBuilder<User?>(
+        stream: _auth.authStateChanges(),
+        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator(); // Show a loading spinner while waiting
+          } else {
+            if (snapshot.hasData) {
+              return const MixyAppHomeScreen(); // Show home screen if user is signed in
+            } else {
+              return SignInScreen(); // Show sign in screen if user is not signed in
+            }
+          }
+        },
+      ),
+      routes: {
+        '/signup': (context) => SignupScreen(),
+        '/home': (context) => MixyAppHomeScreen(),
+      },
     );
   }
 }
