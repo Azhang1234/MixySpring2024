@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'signin.dart';
+import 'signup.dart';
 import 'mixy_app_home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -47,6 +48,10 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+      routes: {
+        '/signup': (context) => SignupScreen(),
+        '/home': (context) => MixyAppHomeScreen(),
+      },
     );
   }
 }
