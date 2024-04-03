@@ -5,7 +5,7 @@ import 'models/tabIcon_data.dart';
 import 'ingredient/ingredient_screen.dart';
 import 'mixing/mixing_screen.dart';
 import 'community/community_screen.dart';
-import 'user_profile/user_profile_screen.dart';
+import 'userScreen/user_profile_screen.dart';
 
 class MixyAppHomeScreen extends StatefulWidget {
   const MixyAppHomeScreen({super.key});
@@ -89,8 +89,8 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      IngredientScreen(animationController: animationController);
+                  tabBody = IngredientScreen(
+                      animationController: animationController);
                 });
               });
             } else if (index == 1) {
@@ -119,8 +119,8 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      UserProfileScreen(animationController: animationController);
+                  tabBody = UserProfileScreen(
+                      animationController: animationController);
                 });
               });
             }

@@ -1,36 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:mixyspring2024/mixy_app_theme.dart';
-import 'package:mixyspring2024/ui_view/body_measurement.dart';
-import 'package:mixyspring2024/ui_view/mediterranean_diet_view.dart';
 
-import '../ui_view/Ingredient_ui_lijun/search_bar_view.dart';
-import '../ui_view/Ingredient_ui_lijun/title_view.dart';
 import '../ui_view/Ingredient_ui_lijun/area_list_view.dart';
-import 'meals_list_view.dart';
+import '../ui_view/Ingredient_ui_lijun/title_view.dart';
+import '../ui_view/user_profile_view_lijun/profile_header_view.dart';
+import '../ui_view/user_profile_view_lijun/summary_view.dart';
+import '../ui_view/user_profile_view_lijun/activity_feed_view.dart';
+import '../ui_view/user_profile_view_lijun/followers_following_view.dart';
 
-class IngredientScreen extends StatefulWidget {
-  const IngredientScreen({Key? key, this.animationController})
+class UserProfileScreen extends StatefulWidget {
+  const UserProfileScreen({Key? key, this.animationController})
       : super(key: key);
 
   final AnimationController? animationController;
+
   @override
-  _IngredientScreenState createState() => _IngredientScreenState();
+  _UserProfileScreenState createState() => _UserProfileScreenState();
 }
 
-class _IngredientScreenState extends State<IngredientScreen>
+class _UserProfileScreenState extends State<UserProfileScreen>
     with TickerProviderStateMixin {
-  Animation<double>? topBarAnimation;
-
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
 
   @override
   void initState() {
-    topBarAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-            parent: widget.animationController!,
-            curve: const Interval(0, 0.5, curve: Curves.fastOutSlowIn)));
+    super.initState();
     addAllListData();
 
     scrollController.addListener(() {
@@ -55,38 +51,42 @@ class _IngredientScreenState extends State<IngredientScreen>
         }
       }
     });
-    super.initState();
   }
 
   void addAllListData() {
-    const int count = 9;
-    //search bar
+    const int count =
+        4; // Adjust based on your actual widgets count for the user profile
+
+    // Example to add ProfileHeaderView with animation
     listViews.add(
-      SearchBarView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      ProfileHeaderView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval((1 / count) * 0, 1.0,
-                curve: Curves.fastOutSlowIn))),
+                curve: Curves.fastOutSlowIn),
+          ),
+        ),
         animationController: widget.animationController,
-        onSubmitted: (String value) {
-          print('Search: $value');
-        },
-      ),
-    );
-    listViews.add(
-      IngredientSelectView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: const Interval((1 / count) * 3, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController,
       ),
     );
 
+    // Add other views (SummaryView, ActivityFeedView, FollowersFollowingView) similarly...
+    listViews.add(
+      SummaryView(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval((1 / count) * 1, 1.0,
+                curve: Curves.fastOutSlowIn),
+          ),
+        ),
+        animationController: widget.animationController,
+      ),
+    );
     listViews.add(
       TitleView(
-        titleTxt: 'Ingredients Cabinet',
+        titleTxt: 'Favorites',
         subTxt: 'Instructions',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -101,7 +101,7 @@ class _IngredientScreenState extends State<IngredientScreen>
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(
                 parent: widget.animationController!,
-                curve: const Interval((1 / count) * 5, 1.0,
+                curve: const Interval((1 / count) * 2, 1.0,
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController!,
       ),
@@ -122,10 +122,7 @@ class _IngredientScreenState extends State<IngredientScreen>
         body: Stack(
           children: <Widget>[
             getMainListViewUI(),
-            // getAppBarUI(),
-            SizedBox(
-              height: MediaQuery.of(context).padding.bottom,
-            )
+            SizedBox(height: MediaQuery.of(context).padding.bottom),
           ],
         ),
       ),
