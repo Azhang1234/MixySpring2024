@@ -5,6 +5,7 @@ import 'signin.dart';
 import 'signup.dart';
 import 'mixy_app_home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
 
@@ -25,7 +26,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
   final FirebaseAuth _auth = FirebaseAuth.instance; // Create FirebaseAuth instance
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,19 +40,19 @@ class MyApp extends StatelessWidget {
         stream: _auth.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator(); // Show a loading spinner while waiting
+            return const CircularProgressIndicator(); 
           } else {
             if (snapshot.hasData) {
-              return const MixyAppHomeScreen(); // Show home screen if user is signed in
+              return const MixyAppHomeScreen(); 
             } else {
-              return SignInScreen(); // Show sign in screen if user is not signed in
+              return SignInScreen(); 
             }
           }
         },
       ),
       routes: {
         '/signup': (context) => SignupScreen(),
-        '/home': (context) => MixyAppHomeScreen(),
+        '/home': (context) => const MixyAppHomeScreen(),
       },
     );
   }
