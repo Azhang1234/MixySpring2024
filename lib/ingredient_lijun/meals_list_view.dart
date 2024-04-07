@@ -3,8 +3,8 @@ import '../../main.dart';
 import '../mixy_app_theme.dart';
 import '../models/meals_list_data.dart';
 
-class MealsListView extends StatefulWidget {
-  const MealsListView(
+class IngredientSelectView extends StatefulWidget {
+  const IngredientSelectView(
       {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
       : super(key: key);
 
@@ -12,10 +12,10 @@ class MealsListView extends StatefulWidget {
   final Animation<double>? mainScreenAnimation;
 
   @override
-  _MealsListViewState createState() => _MealsListViewState();
+  _IngredientSelectViewState createState() => _IngredientSelectViewState();
 }
 
-class _MealsListViewState extends State<MealsListView>
+class _IngredientSelectViewState extends State<IngredientSelectView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
   List<MealsListData> mealsListData = MealsListData.tabIconsList;
@@ -145,7 +145,7 @@ class MealsView extends StatelessWidget {
                               style: const TextStyle(
                                 fontFamily: MixyAppTheme.fontName,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 12,
                                 letterSpacing: 0.2,
                                 color: MixyAppTheme.white,
                               ),
@@ -172,61 +172,27 @@ class MealsView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            mealsListData?.kacl != 0
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      Text(
-                                        mealsListData!.kacl.toString(),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontFamily: MixyAppTheme.fontName,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 24,
-                                          letterSpacing: 0.2,
-                                          color: MixyAppTheme.white,
-                                        ),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 4, bottom: 3),
-                                        child: Text(
-                                          'kcal',
-                                          style: TextStyle(
-                                            fontFamily:
-                                                MixyAppTheme.fontName,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 10,
-                                            letterSpacing: 0.2,
-                                            color: MixyAppTheme.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      color: MixyAppTheme.nearlyWhite,
-                                      shape: BoxShape.circle,
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: MixyAppTheme.nearlyBlack
-                                                .withOpacity(0.4),
-                                            offset: const Offset(8.0, 8.0),
-                                            blurRadius: 8.0),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Icon(
-                                        Icons.add,
-                                        color:
-                                            HexColor(mealsListData!.endColor),
-                                        size: 24,
-                                      ),
-                                    ),
-                                  ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: MixyAppTheme.nearlyWhite,
+                                shape: BoxShape.circle,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: MixyAppTheme.nearlyBlack
+                                          .withOpacity(0.4),
+                                      offset: const Offset(8.0, 8.0),
+                                      blurRadius: 8.0),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Icon(
+                                  Icons.add,
+                                  color: HexColor(mealsListData!.endColor),
+                                  size: 24,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
