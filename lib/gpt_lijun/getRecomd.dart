@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<String> getCocktailRecommendation({
   required List<String> ingredients,
@@ -7,7 +8,8 @@ Future<String> getCocktailRecommendation({
   String? occasion,
   String? complexity,
 }) async {
-  const apiKey = ''; // Replace with your actual API key
+  await dotenv.load();
+  final apiKey = dotenv.env['OPENAI_API_KEY']!; // Replace with your actual API key
   const url = 'https://api.openai.com/v1/chat/completions';
 
   // Formatting the prompt based on the parameters provided

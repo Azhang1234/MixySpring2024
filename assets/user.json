@@ -24,7 +24,7 @@
     }
   ],
   "CurrentDrinkRequest": {
-    "Ingredients": ["vodka", "lime", "ginger beer"],
+    "Ingredients": ["cheese", "lime", "ginger beer"],
     "TypesOfAlcohol": "Sweet",
     "Occasion": "Summer evening",
     "Complexity": "Easy"

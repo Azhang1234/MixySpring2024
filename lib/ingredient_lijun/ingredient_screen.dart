@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mixyspring2024/mixy_app_theme.dart';
 import 'package:mixyspring2024/ui_view/body_measurement.dart';
@@ -7,6 +8,7 @@ import '../ui_view/Ingredient_ui_lijun/search_bar_view.dart';
 import '../ui_view/Ingredient_ui_lijun/title_view.dart';
 import '../ui_view/Ingredient_ui_lijun/area_list_view.dart';
 import 'meals_list_view.dart';
+import '../models/ingredients.dart';
 
 class IngredientScreen extends StatefulWidget {
   const IngredientScreen({Key? key, this.animationController})
@@ -20,7 +22,7 @@ class IngredientScreen extends StatefulWidget {
 class _IngredientScreenState extends State<IngredientScreen>
     with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
-
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
@@ -68,8 +70,15 @@ class _IngredientScreenState extends State<IngredientScreen>
             curve: const Interval((1 / count) * 0, 1.0,
                 curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
-        onSubmitted: (String value) {
-          print('Search: $value');
+        onSubmitted: (String value) async {
+            final QuerySnapshot snapshot = await firestore.collection('ingredients').where('name', isEqualTo: value).get();
+            final List<Ingredient?> ingredients = snapshot.docs.map((doc) {
+              if (doc.exists) {
+                return Ingredient.fromJson(doc.data() as Map<String, dynamic>);
+              } else {
+                return null;
+              }
+            }).toList();
         },
       ),
     );
