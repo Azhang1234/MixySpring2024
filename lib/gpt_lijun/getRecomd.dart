@@ -7,7 +7,7 @@ Future<String> getCocktailRecommendation({
   String? occasion,
   String? complexity,
 }) async {
-  const apiKey = ''; // Replace with your actual API key
+  const apiKey = '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'; // Replace with your actual API key
   const url = 'https://api.openai.com/v1/chat/completions';
 
   // Formatting the prompt based on the parameters provided

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<String> callGPT4(String prompt) async {
-  const apiKey = 'YOUR_API_KEY_HERE'; // Replace with your actual API key
+  const apiKey = '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'; // Replace with your actual API key
   const url = 'https://api.openai.com/v1/engines/davinci-codex/completions';
 
   try {

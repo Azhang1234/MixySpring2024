@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CurrentDrinkRequest {
   final List<String> ingredients;
@@ -121,6 +123,7 @@ class Drink {
 
 class DataManager {
   final String filePath = "assets/user.json";
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<Map<String, dynamic>> _readJson() async {
     try {
@@ -132,10 +135,11 @@ class DataManager {
     }
   }
 
-  Future<void> _writeJson(Map<String, dynamic> json) async {
-    final file = File(filePath);
-    await file.writeAsString(jsonEncode(json));
-  }
+Future<void> _writeJson(Map<String, dynamic> json) async {
+  return firestore.collection('your_collection').add(json)
+    .then((value) => print('Document Added'))
+    .catchError((error) => print('Failed to add document: $error'));
+}
 
   // Retrieve user data
   Future<User> getUser() async {
