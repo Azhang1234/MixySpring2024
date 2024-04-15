@@ -16,6 +16,21 @@ class AddButtonScreen extends StatefulWidget {
   _AddButtonScreenState createState() => _AddButtonScreenState();
 }
 
+// this is the screen widget that pops up after clicking "Mix it Up!"
+class NewScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("New Screen"),
+      ),
+      body: Center(
+        child: Text("This is a new screen!"),
+      ),
+    );
+  }
+}
+
 class _AddButtonScreenState extends State<AddButtonScreen>
     with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
@@ -71,60 +86,8 @@ class _AddButtonScreenState extends State<AddButtonScreen>
         animationController: widget.animationController!,
       ),
     );
-
-    // listViews.add(
-    //   AddButtonView(
-    //     mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-    //         CurvedAnimation(
-    //             parent: widget.animationController!,
-    //             curve: const Interval((1 / count) * 5, 1.0,
-    //                 curve: Curves.fastOutSlowIn))),
-    //     mainScreenAnimationController: widget.animationController!,
-    //   ),
-    // );
-
-    // BEST WORKING BUTTON SO FAR...
-    // listViews.add( 
-    //   Container(
-    //     width: 200, // Specify the width of the InkWell
-    //     height: 200, // Specify the height of the InkWell
-    //     child: InkWell(
-    //       onTap: () {
-    //         // Action to perform on tap
-    //         print('InkWell tapped!');
-    //       },
-    //       child: Ink(
-    //         decoration: BoxDecoration(
-    //           // Set a border radius if you need a rounded container
-    //           borderRadius: BorderRadius.circular(10),
-    //           // Add an image
-    //           image: DecorationImage(
-    //             image: AssetImage('assets/mixy_app/snack.png'), // Use your custom image
-    //             fit: BoxFit.cover, // Cover the entire space of the Container
-    //           ),
-    //         ),
-    //         child: Container(
-    //           alignment: Alignment.center, // Align the child text to center
-    //           // Add additional styling or widgets inside your InkWell
-    //           child: Text(
-    //             'Click this!',
-    //             style: TextStyle(
-    //               fontWeight: FontWeight.bold,
-    //               color: Colors.white,
-    //               shadows: [
-    //                 Shadow(
-    //                   blurRadius: 10.0,
-    //                   color: Colors.black.withOpacity(0.5),
-    //                   offset: Offset(0, 5),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
+    
+    // this is the grid array of options for the drink
     listViews.add(
       AddButtonView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -135,27 +98,6 @@ class _AddButtonScreenState extends State<AddButtonScreen>
         mainScreenAnimationController: widget.animationController!,
       ),
     );
-
-
-    // listViews.add(
-    //   WorkoutView(
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-    //         parent: widget.animationController!,
-    //         curve:
-    //             const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-    //     animationController: widget.animationController!,
-    //   ),
-    // );
-
-    // listViews.add(
-    //   RunningView(
-    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-    //         parent: widget.animationController!,
-    //         curve:
-    //             const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
-    //     animationController: widget.animationController!,
-    //   ),
-    // );
 
     listViews.add(
       TitleView(
@@ -169,14 +111,32 @@ class _AddButtonScreenState extends State<AddButtonScreen>
       ),
     );
 
+    // this is the "Mix it Up" button
+    // CallGPT() is called when the button is pressed
+    // a NewScreen is pushed onto the Navigator stack, which shiould show the drink(s) reccomended
     listViews.add(
     Container(
       width: 220, // increased size to accommodate margin
       height: 220,
       margin: const EdgeInsets.all(20.0), // adds pixels of space around the Container
       child: InkWell(
-        onTap: ()  {
+        onTap: () async {
           print("GPT Called");
+          
+          // show the loading dialog
+          showLoadingDialog(context);
+
+          // simulate some processing delay
+          // EDIT THE DELAY HERE
+          await Future.delayed(Duration(seconds: 2));
+
+          // dimiss dialog
+          Navigator.of(context, rootNavigator: true).pop();
+
+          // navigate to the new screen
+          Navigator.push(context, MaterialPageRoute(builder: (context) => NewScreen()),);
+          
+          // LETTING GPT DO ITS THING (BUT IT COSTS MONEY SO LEAVE IT COMMENTED OUT FOR NOW)
           //CallGPT();
         },
         child: Ink(
@@ -200,39 +160,54 @@ class _AddButtonScreenState extends State<AddButtonScreen>
         ),
       ),
     );
+  }
 
+  void showLoadingDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, // prevents the dialog from closing on tap outside
+    builder: (BuildContext context) {
+      return Dialog(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(), // loading spinner...
+              SizedBox(width: 20),
+              Text("Mixing... Please wait!"), // loading text...
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Drink processRawStringToDrink(String rawString) {
     // Define regex patterns to extract information
     final namePattern = RegExp(r"is a (.+?)\. Here\'s how to make it:");
-    final ingredientsPattern =
-        RegExp(r'Ingredients:\n- (.+?)\n\nInstructions:', dotAll: true);
-    final instructionsPattern =
-        RegExp(r'Instructions:\n(.+?)\n\n', dotAll: true);
-    final equipmentPattern = RegExp(r'Equipment:\n- (.+?)\n\n',
-        dotAll: true); // If present in the string
+    final ingredientsPattern = RegExp(r'Ingredients:\n- (.+?)\n\nInstructions:', dotAll: true);
+    final instructionsPattern = RegExp(r'Instructions:\n(.+?)\n\n', dotAll: true);
+    final equipmentPattern = RegExp(r'Equipment:\n- (.+?)\n\n',dotAll: true);
 
-    // Extracting information using regex
+    // extracting information using regex
     final nameMatches = namePattern.firstMatch(rawString);
     final ingredientsMatches = ingredientsPattern.firstMatch(rawString);
     final instructionsMatches = instructionsPattern.firstMatch(rawString);
-    final equipmentMatches = equipmentPattern
-        .firstMatch(rawString); // Optional, based on string format
+    final equipmentMatches = equipmentPattern.firstMatch(rawString);
 
-    // Processing extracted information
+    // processing extracted information
     final name = nameMatches?.group(1) ?? "Unknown Drink";
     final ingredientsList = ingredientsMatches?.group(1)?.split('\n- ') ?? [];
-    final instructions = instructionsMatches?.group(1)?.replaceAll('\n', ' ') ??
-        "No instructions provided.";
-    final equipmentsList = equipmentMatches?.group(1)?.split('\n- ') ??
-        ["Standard bar tools"]; // Default equipment
+    final instructions = instructionsMatches?.group(1)?.replaceAll('\n', ' ') ?? "No instructions provided.";
+    final equipmentsList = equipmentMatches?.group(1)?.split('\n- ') ?? ["Standard bar tools"];
 
-    // Creating a Drink object
+    // creating a Drink object
     Drink newDrink = Drink(
       name: name,
       timeCreated: DateTime.now().toIso8601String(),
-      favorite: false, // Defaulting to false, adjust as needed
+      favorite: false,
       instructions: instructions,
       equipments: equipmentsList,
       ingredients: ingredientsList,
@@ -243,18 +218,14 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
   void CallGPT() async {
     final dataManager = DataManager();
-    var user =
-        await dataManager.getUser(); // Assumes getUser returns a User object
-    var drinks = await dataManager
-        .getDrinks(); // Assumes getDrinks returns a List<Drink>
-    var currentDrinkRequest = await dataManager
-        .getCurrentDrinkRequest(); // Assumes getCurrentDrinkRequest returns a CurrentDrinkRequest object
-    print(user);
+    var user = await dataManager.getUser();
+    var drinks = await dataManager.getDrinks();
+    var currentDrinkRequest = await dataManager.getCurrentDrinkRequest();
     drinks.forEach(print);
     print(currentDrinkRequest);
 
-//demo of gpt writing into local json file
-    //call getCocktailRecommendation
+    // demo of gpt writing into local json file
+    // call getCocktailRecommendation
     String cocktailRecommendation = '';
     cocktailRecommendation = await getCocktailRecommendation(
       ingredients: currentDrinkRequest.ingredients,
@@ -269,8 +240,8 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     dataManager.addDrink(drink);
     // dataManager.addDrink(drinkData);
     setState(() {
-      // Rebuilda your UI based on the data you've loaded
-      listViews.clear(); // Clear existing views
+      // rebuild UI based on the data you've loaded
+      listViews.clear();
       addAllListData();
     });
   }
