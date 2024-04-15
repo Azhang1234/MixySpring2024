@@ -60,7 +60,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'What are you trying to drink?',
+        titleTxt: 'Select your Drink Options:',
         subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -70,28 +70,94 @@ class _AddButtonScreenState extends State<AddButtonScreen>
       ),
     );
 
+    // listViews.add(
+    //   AddButtonView(
+    //     mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //         CurvedAnimation(
+    //             parent: widget.animationController!,
+    //             curve: const Interval((1 / count) * 5, 1.0,
+    //                 curve: Curves.fastOutSlowIn))),
+    //     mainScreenAnimationController: widget.animationController!,
+    //   ),
+    // );
+
+    // BEST WORKING BUTTON SO FAR...
+    // listViews.add( 
+    //   Container(
+    //     width: 200, // Specify the width of the InkWell
+    //     height: 200, // Specify the height of the InkWell
+    //     child: InkWell(
+    //       onTap: () {
+    //         // Action to perform on tap
+    //         print('InkWell tapped!');
+    //       },
+    //       child: Ink(
+    //         decoration: BoxDecoration(
+    //           // Set a border radius if you need a rounded container
+    //           borderRadius: BorderRadius.circular(10),
+    //           // Add an image
+    //           image: DecorationImage(
+    //             image: AssetImage('assets/mixy_app/snack.png'), // Use your custom image
+    //             fit: BoxFit.cover, // Cover the entire space of the Container
+    //           ),
+    //         ),
+    //         child: Container(
+    //           alignment: Alignment.center, // Align the child text to center
+    //           // Add additional styling or widgets inside your InkWell
+    //           child: Text(
+    //             'Click this!',
+    //             style: TextStyle(
+    //               fontWeight: FontWeight.bold,
+    //               color: Colors.white,
+    //               shadows: [
+    //                 Shadow(
+    //                   blurRadius: 10.0,
+    //                   color: Colors.black.withOpacity(0.5),
+    //                   offset: Offset(0, 5),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
     listViews.add(
-      WorkoutView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController!,
-            curve:
-                const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController!,
-      ),
-    );
-    listViews.add(
-      RunningView(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: widget.animationController!,
-            curve:
-                const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
-        animationController: widget.animationController!,
+      AddButtonView(
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+                parent: widget.animationController!,
+                curve: const Interval((1 / count) * 5, 1.0,
+                    curve: Curves.fastOutSlowIn))),
+        mainScreenAnimationController: widget.animationController!,
       ),
     );
 
+
+    // listViews.add(
+    //   WorkoutView(
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve:
+    //             const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn))),
+    //     animationController: widget.animationController!,
+    //   ),
+    // );
+
+    // listViews.add(
+    //   RunningView(
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve:
+    //             const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn))),
+    //     animationController: widget.animationController!,
+    //   ),
+    // );
+
     listViews.add(
       TitleView(
-        titleTxt: 'Featured Ingredients',
+        titleTxt: 'Generate a Mixy Drink!',
         subTxt: 'more',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -102,15 +168,37 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     );
 
     listViews.add(
-      AreaListView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: const Interval((1 / count) * 5, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController!,
+    Container(
+      width: 220, // increased size to accommodate margin
+      height: 220,
+      margin: const EdgeInsets.all(20.0), // adds pixels of space around the Container
+      child: InkWell(
+        onTap: () {
+          // EDIT THIS TO INCLUDE GPT FUNCTIONALITY
+          print('InkWell tapped!');
+        },
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: AssetImage('assets/mixy_app/Mix_it_Up.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              '',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
+
   }
 
   Future<bool> getData() async {
