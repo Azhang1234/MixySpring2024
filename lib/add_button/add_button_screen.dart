@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mixyspring2024/gpt_lijun/getRecomd.dart';
 import 'package:mixyspring2024/ui_view/add_button_view.dart';
 import 'package:mixyspring2024/ui_view/running_view.dart';
 import 'package:mixyspring2024/ui_view/title_view.dart';
 import 'package:mixyspring2024/ui_view/workout_view.dart';
+import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 
 import '../mixy_app_theme.dart';
 
@@ -173,9 +175,9 @@ class _AddButtonScreenState extends State<AddButtonScreen>
       height: 220,
       margin: const EdgeInsets.all(20.0), // adds pixels of space around the Container
       child: InkWell(
-        onTap: () {
-          // EDIT THIS TO INCLUDE GPT FUNCTIONALITY
-          print('InkWell tapped!');
+        onTap: ()  {
+          print("GPT Called");
+          //CallGPT();
         },
         child: Ink(
           decoration: BoxDecoration(
@@ -201,6 +203,77 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
   }
 
+  Drink processRawStringToDrink(String rawString) {
+    // Define regex patterns to extract information
+    final namePattern = RegExp(r"is a (.+?)\. Here\'s how to make it:");
+    final ingredientsPattern =
+        RegExp(r'Ingredients:\n- (.+?)\n\nInstructions:', dotAll: true);
+    final instructionsPattern =
+        RegExp(r'Instructions:\n(.+?)\n\n', dotAll: true);
+    final equipmentPattern = RegExp(r'Equipment:\n- (.+?)\n\n',
+        dotAll: true); // If present in the string
+
+    // Extracting information using regex
+    final nameMatches = namePattern.firstMatch(rawString);
+    final ingredientsMatches = ingredientsPattern.firstMatch(rawString);
+    final instructionsMatches = instructionsPattern.firstMatch(rawString);
+    final equipmentMatches = equipmentPattern
+        .firstMatch(rawString); // Optional, based on string format
+
+    // Processing extracted information
+    final name = nameMatches?.group(1) ?? "Unknown Drink";
+    final ingredientsList = ingredientsMatches?.group(1)?.split('\n- ') ?? [];
+    final instructions = instructionsMatches?.group(1)?.replaceAll('\n', ' ') ??
+        "No instructions provided.";
+    final equipmentsList = equipmentMatches?.group(1)?.split('\n- ') ??
+        ["Standard bar tools"]; // Default equipment
+
+    // Creating a Drink object
+    Drink newDrink = Drink(
+      name: name,
+      timeCreated: DateTime.now().toIso8601String(),
+      favorite: false, // Defaulting to false, adjust as needed
+      instructions: instructions,
+      equipments: equipmentsList,
+      ingredients: ingredientsList,
+    );
+
+    return newDrink;
+  }
+
+  void CallGPT() async {
+    final dataManager = DataManager();
+    var user =
+        await dataManager.getUser(); // Assumes getUser returns a User object
+    var drinks = await dataManager
+        .getDrinks(); // Assumes getDrinks returns a List<Drink>
+    var currentDrinkRequest = await dataManager
+        .getCurrentDrinkRequest(); // Assumes getCurrentDrinkRequest returns a CurrentDrinkRequest object
+    print(user);
+    drinks.forEach(print);
+    print(currentDrinkRequest);
+
+//demo of gpt writing into local json file
+    //call getCocktailRecommendation
+    String cocktailRecommendation = '';
+    cocktailRecommendation = await getCocktailRecommendation(
+      ingredients: currentDrinkRequest.ingredients,
+      typeOfAlcohol: currentDrinkRequest.typesOfAlcohol,
+      occasion: currentDrinkRequest.occasion,
+      complexity: currentDrinkRequest.complexity,
+    );
+    print(cocktailRecommendation);
+    //store into local json file
+    //process the raw string
+    Drink drink = processRawStringToDrink(cocktailRecommendation);
+    dataManager.addDrink(drink);
+    // dataManager.addDrink(drinkData);
+    setState(() {
+      // Rebuilda your UI based on the data you've loaded
+      listViews.clear(); // Clear existing views
+      addAllListData();
+    });
+  }
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
