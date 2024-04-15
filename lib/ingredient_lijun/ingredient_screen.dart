@@ -70,16 +70,6 @@ class _IngredientScreenState extends State<IngredientScreen>
             curve: const Interval((1 / count) * 0, 1.0,
                 curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController,
-        onSubmitted: (String value) async {
-            final QuerySnapshot snapshot = await firestore.collection('ingredients').where('name', isEqualTo: value).get();
-            final List<Ingredient?> ingredients = snapshot.docs.map((doc) {
-              if (doc.exists) {
-                return Ingredient.fromJson(doc.data() as Map<String, dynamic>);
-              } else {
-                return null;
-              }
-            }).toList();
-        },
       ),
     );
     listViews.add(
