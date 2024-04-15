@@ -55,44 +55,6 @@ class _UserProfileScreenState extends State<UserProfileScreen>
     });
   }
 
-  Drink processRawStringToDrink(String rawString) {
-    // Define regex patterns to extract information
-    final namePattern = RegExp(r"is a (.+?)\. Here\'s how to make it:");
-    final ingredientsPattern =
-        RegExp(r'Ingredients:\n- (.+?)\n\nInstructions:', dotAll: true);
-    final instructionsPattern =
-        RegExp(r'Instructions:\n(.+?)\n\n', dotAll: true);
-    final equipmentPattern = RegExp(r'Equipment:\n- (.+?)\n\n',
-        dotAll: true); // If present in the string
-
-    // Extracting information using regex
-    final nameMatches = namePattern.firstMatch(rawString);
-    final ingredientsMatches = ingredientsPattern.firstMatch(rawString);
-    final instructionsMatches = instructionsPattern.firstMatch(rawString);
-    final equipmentMatches = equipmentPattern
-        .firstMatch(rawString); // Optional, based on string format
-
-    // Processing extracted information
-    final name = nameMatches?.group(1) ?? "Unknown Drink";
-    final ingredientsList = ingredientsMatches?.group(1)?.split('\n- ') ?? [];
-    final instructions = instructionsMatches?.group(1)?.replaceAll('\n', ' ') ??
-        "No instructions provided.";
-    final equipmentsList = equipmentMatches?.group(1)?.split('\n- ') ??
-        ["Standard bar tools"]; // Default equipment
-
-    // Creating a Drink object
-    Drink newDrink = Drink(
-      name: name,
-      timeCreated: DateTime.now().toIso8601String(),
-      favorite: false, // Defaulting to false, adjust as needed
-      instructions: instructions,
-      equipments: equipmentsList,
-      ingredients: ingredientsList,
-    );
-
-    return newDrink;
-  }
-
   void refreshData() async {
     var user =
         await dataManager.getUser(); // Assumes getUser returns a User object
@@ -100,24 +62,6 @@ class _UserProfileScreenState extends State<UserProfileScreen>
         .getDrinks(); // Assumes getDrinks returns a List<Drink>
     var currentDrinkRequest = await dataManager
         .getCurrentDrinkRequest(); // Assumes getCurrentDrinkRequest returns a CurrentDrinkRequest object
-    print(user);
-    drinks.forEach(print);
-    print(currentDrinkRequest);
-
-//demo of gpt writing into local json file
-    //call getCocktailRecommendation
-    String cocktailRecommendation = '';
-    cocktailRecommendation = await getCocktailRecommendation(
-      ingredients: currentDrinkRequest.ingredients,
-      typeOfAlcohol: currentDrinkRequest.typesOfAlcohol,
-      occasion: currentDrinkRequest.occasion,
-      complexity: currentDrinkRequest.complexity,
-    );
-    print(cocktailRecommendation);
-    //store into local json file
-    //process the raw string
-    Drink drink = processRawStringToDrink(cocktailRecommendation);
-    dataManager.addDrink(drink);
     // dataManager.addDrink(drinkData);
     setState(() {
       // Rebuild your UI based on the data you've loaded
