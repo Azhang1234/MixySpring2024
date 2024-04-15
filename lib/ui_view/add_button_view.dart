@@ -16,7 +16,7 @@ class AddButtonView extends StatefulWidget {
 class _AddButtonViewState extends State<AddButtonView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  // Set<int> toggledItems = Set<int>();
+  List<bool> toggleStates = [];
 
   List<String> areaListData = <String>[
     'assets/mixy_app/snack.png',
@@ -32,6 +32,8 @@ class _AddButtonViewState extends State<AddButtonView>
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
     super.initState();
+    // initialize toggleStates with false for each item
+    toggleStates = List<bool>.filled(areaListData.length, false);
   }
 
   @override
@@ -84,6 +86,35 @@ class _AddButtonViewState extends State<AddButtonView>
                         animation: animation,
                         animationController: animationController!,
                         index: index,
+                        isToggled: toggleStates[index],
+                        onToggle: () {
+                          // toggles the state of the tapped item
+                          setState(() {
+                            // Check if the current item is already toggled on
+                            bool isCurrentlyToggled = toggleStates[index];
+
+                            // reset the toggle states for items in the same group
+                            // top row group: index 0, 1, 2
+                            // bottom row group: index 3, 4, 5
+                            if (index >= 0 && index <= 2) {
+                              for (int i = 0; i <= 2; i++) {
+                                toggleStates[i] = false;
+                              }
+                            } else if (index >= 3 && index <= 5) {
+                              for (int i = 3; i <= 5; i++) {
+                                toggleStates[i] = false;
+                              }
+                            }
+
+                            // toggle the selected item only if it was not already toggled on
+                            // this allows turning an option off by clicking on it again
+                            // NECESSARY FOR SINGLE SELECTION; USERS CAN OPT FOR NO OPTIONS...
+                            toggleStates[index] = !isCurrentlyToggled;
+
+                            // prints the index of the toggled item (debugging purposes)
+                            print('Item $index was toggled!');
+                          });
+                        },
                       );
                     },
                   ),
@@ -104,12 +135,18 @@ class AreaView extends StatelessWidget {
     this.animationController,
     this.animation,
     required this.index,
+    required this.isToggled,
+    this.onToggle,
   }) : super(key: key);
 
   final String? imagepath;
   final AnimationController? animationController;
   final Animation<double>? animation;
   final int index;
+  final bool isToggled;
+  final VoidCallback? onToggle;
+  
+  // get isToggled => null;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +160,7 @@ class AreaView extends StatelessWidget {
                 0.0, 50 * (1.0 - animation!.value), 0.0),
             child: Container(
               decoration: BoxDecoration(
-                color: MixyAppTheme.white,
+                color: isToggled ? MixyAppTheme.nearlyDarkBlue : MixyAppTheme.white,
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8.0),
                     bottomLeft: Radius.circular(8.0),
@@ -144,7 +181,13 @@ class AreaView extends StatelessWidget {
                   hoverColor: Colors.transparent,
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   splashColor: MixyAppTheme.nearlyDarkBlue.withOpacity(0.2),
-                  onTap: () {print('Item $index was tapped!');},
+                  onTap: () {
+                    // toggles the state of the tapped item
+                    onToggle?.call();
+
+                    // prints the index of the tapped item (debugging purposes)
+                    print('Item $index was tapped!');
+                    },
                   child: Column(
                     children: <Widget>[
                       Padding(
