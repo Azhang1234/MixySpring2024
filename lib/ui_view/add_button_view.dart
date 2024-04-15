@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../mixy_app_theme.dart';
 
-class AreaListView extends StatefulWidget {
-  const AreaListView(
+class AddButtonView extends StatefulWidget {
+  const AddButtonView(
       {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
       : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
   @override
-  _AreaListViewState createState() => _AreaListViewState();
+  _AddButtonViewState createState() => _AddButtonViewState();
 }
 
-class _AreaListViewState extends State<AreaListView>
+class _AddButtonViewState extends State<AddButtonView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
+  // Set<int> toggledItems = Set<int>();
+
   List<String> areaListData = <String>[
     'assets/mixy_app/snack.png',
     'assets/mixy_app/mixyLogo.png',
@@ -40,6 +42,7 @@ class _AreaListViewState extends State<AreaListView>
 
   @override
   Widget build(BuildContext context) {
+    // final bool isToggled = context.findAncestorStateOfType<_AddButtonViewState>()!.toggledItems.contains(index);
     return AnimatedBuilder(
       animation: widget.mainScreenAnimationController!,
       builder: (BuildContext context, Widget? child) {
@@ -49,7 +52,7 @@ class _AreaListViewState extends State<AreaListView>
             transform: Matrix4.translationValues(
                 0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
             child: AspectRatio(
-              aspectRatio: 1.0,
+              aspectRatio: 1.5,
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: GridView(
