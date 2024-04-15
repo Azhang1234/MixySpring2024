@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 import 'package:mixyspring2024/mixy_app_theme.dart';
@@ -141,6 +142,16 @@ class _UserProfileScreenState extends State<UserProfileScreen>
       color: MixyAppTheme.background,
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                await auth.FirebaseAuth.instance.signOut();
+              },
+            ),
+          ],
+        ),
         body: Stack(
           children: <Widget>[
             getMainListViewUI(),

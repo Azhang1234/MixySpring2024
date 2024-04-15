@@ -13,4 +13,10 @@ class Ingredient {
       // ... other properties ...
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      // ... other properties ...
+    };
+  }
 }
