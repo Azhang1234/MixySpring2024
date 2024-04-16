@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'mixy_app_home_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -18,6 +19,11 @@ class _SignupScreenState extends State<SignupScreen> {
         email: email,
         password: password,
       );
+      if (userCredential.user != null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => MixyAppHomeScreen()),
+      );
+    }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');

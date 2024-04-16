@@ -4,41 +4,38 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class CurrentDrinkRequest {
   final List<String> ingredients;
-  final String typesOfAlcohol;
-  final String occasion;
-  final String complexity;
+  final String optionalPreferences;
+  final String alcoholStrength;
 
   CurrentDrinkRequest({
     required this.ingredients,
-    required this.typesOfAlcohol,
-    required this.occasion,
-    required this.complexity,
+    required this.optionalPreferences,
+    required this.alcoholStrength,
   });
 
   // Factory constructor to create a CurrentDrinkRequest instance from a Map
   factory CurrentDrinkRequest.fromJson(Map<String, dynamic> json) {
     return CurrentDrinkRequest(
       ingredients: List<String>.from(json['Ingredients']),
-      typesOfAlcohol: json['TypesOfAlcohol'], // Corrected field access
-      occasion: json['Occasion'],
-      complexity: json['Complexity'],
+      optionalPreferences: json['OptionalPreferences'], // Corrected field access
+      alcoholStrength: json['AlcoholStrength'],
     );
   }
   Map<String, dynamic> toJson() {
     return {
       'Ingredients': this.ingredients,
-      'TypesOfAlcohol': this.typesOfAlcohol,
-      'Occasion': this.occasion,
-      'Complexity': this.complexity,
+      'OptionalPreferences': this.optionalPreferences,
+      'AlcoholStrength': this.alcoholStrength
     };
   }
 
   @override
   String toString() {
-    return 'CurrentDrinkRequest(ingredients: $ingredients, typesOfAlcohol: $typesOfAlcohol, occasion: $occasion, complexity: $complexity)';
+    return 'CurrentDrinkRequest(ingredients: $ingredients, optionalPreferences: $optionalPreferences, alcoholStrength: $alcoholStrength)';
   }
 }
 
@@ -57,10 +54,10 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      name: json['Name'],
-      id: json['Id'],
-      bio: json['Bio'],
-      imageUrl: json['ImageUrl'],
+      name: json['Name'] ?? '',
+      id: json['Id'] ?? '',
+      bio: json['Bio'] ?? '',
+      imageUrl: json['ImageUrl'] ?? '',
     );
   }
   Map<String, dynamic> toJson() {
@@ -122,79 +119,62 @@ class Drink {
 }
 
 class DataManager {
-  final String filePath = "assets/user.json";
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
+  String? get userId => user?.uid;
 
-  Future<Map<String, dynamic>> _readJson() async {
-    try {
-      final String jsonString = await rootBundle.loadString(filePath);
-      return jsonDecode(jsonString);
-    } catch (e) {
-      print('Error reading JSON file: $e');
-      return {}; // Return an empty map or handle the error appropriately
-    }
+  Future<DocumentSnapshot> _readFirestore(String subCollectionName) async {
+    return await firestore.collection('Users').doc(userId).collection(subCollectionName).get().then((value) => value.docs.first);
   }
 
-Future<void> _writeJson(Map<String, dynamic> json) async {
-  return firestore.collection('your_collection').add(json)
-    .then((value) => print('Document Added'))
-    .catchError((error) => print('Failed to add document: $error'));
-}
+  Future<void> _writeFirestore(String subCollectionName, Map<String, dynamic> json) async {
+    return await firestore.collection('Users').doc(userId).collection(subCollectionName).doc(userId).set(json)
+      .then((value) => print('Document Added'))
+      .catchError((error) => print('Failed to add document: $error'));
+  }
 
   // Retrieve user data
   Future<User> getUser() async {
-    final json = await _readJson();
-    return User.fromJson(json['User']);
+    final DocumentSnapshot doc = await firestore.collection('Users').doc(userId).get();
+    return User.fromJson(Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>));
   }
 
-// Update user data
+  // Update user data
   Future<void> updateUser(User user) async {
-    final json = await _readJson();
-    json['User'] = user.toJson();
-    await _writeJson(json);
+    await firestore.collection('Users').doc(userId).set(user.toJson());
   }
 
+  // Retrieve CurrentDrinkRequest data
   Future<CurrentDrinkRequest> getCurrentDrinkRequest() async {
-    final json = await _readJson();
-    Map<String, dynamic> drinkRequestData =
-        Map<String, dynamic>.from(json['CurrentDrinkRequest']);
-    return CurrentDrinkRequest.fromJson(drinkRequestData);
+    final DocumentSnapshot doc = await _readFirestore('CurrentDrinkRequests');
+    if (doc.data() != null) {
+      return CurrentDrinkRequest.fromJson(Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>));
+    } else {
+      throw Exception('CurrentDrinkRequest document does not exist or is null');
+    }  
   }
 
-// Update CurrentDrinkRequest data
-  Future<void> updateCurrentDrinkRequest(
-      CurrentDrinkRequest drinkRequest) async {
-    final json = await _readJson();
-    json['CurrentDrinkRequest'] = drinkRequest.toJson();
-    await _writeJson(json);
+  // Update CurrentDrinkRequest data
+  Future<void> updateCurrentDrinkRequest(CurrentDrinkRequest drinkRequest) async {
+    await _writeFirestore('CurrentDrinkRequests', drinkRequest.toJson());
   }
 
   // Retrieve all drinks
   Future<List<Drink>> getDrinks() async {
-    final json = await _readJson();
-    return (json['Drinks'] as List)
-        .map((drinkJson) => Drink.fromJson(drinkJson))
-        .toList();
+    final QuerySnapshot querySnapshot = await firestore.collection('Users').doc(userId).collection('Drinks').get();
+    return querySnapshot.docs.map((doc) => Drink.fromJson(Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>))).toList();
   }
 
-// Append a new drink
+  // Append a new drink
   Future<void> addDrink(Drink drink) async {
-    final json = await _readJson();
-    List drinks = json['Drinks'];
-    drinks.add(drink.toJson());
-    await _writeJson(json);
+    await firestore.collection('Users').doc(userId).collection('Drinks').add(drink.toJson());
   }
 
   // Update a specific drink
-  Future<void> updateDrink(
-      String drinkName, Map<String, dynamic> drinkData) async {
-    final json = await _readJson();
-    final drinks = List<Map<String, dynamic>>.from(json['Drinks']);
-    final index = drinks.indexWhere((drink) => drink['Name'] == drinkName);
-    if (index != -1) {
-      drinks[index] = drinkData;
-      json['Drinks'] = drinks;
-      await _writeJson(json);
+  Future<void> updateDrink(String drinkId, Map<String, dynamic> drinkData) async {
+    final DocumentSnapshot doc = await firestore.collection('Users').doc(userId).collection('Drinks').doc(drinkId).get();
+    if (doc.exists) {
+      await firestore.collection('Users').doc(userId).collection('Drinks').doc(drinkId).update(drinkData);
     }
   }
 }

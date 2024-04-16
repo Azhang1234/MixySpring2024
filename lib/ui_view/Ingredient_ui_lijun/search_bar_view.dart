@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 import 'package:mixyspring2024/mixy_app_theme.dart';
 import 'package:mixyspring2024/models/ingredients.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class SearchBarView extends StatefulWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
+  
 
   SearchBarView({
     Key? key,
@@ -21,13 +24,16 @@ class SearchBarView extends StatefulWidget {
 class _SearchBarViewState extends State<SearchBarView> {
   final TextEditingController _controller = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<Ingredient> _results = [];
 
+  GlobalKey<AutoCompleteTextFieldState<Ingredient>> key = GlobalKey();
+  
+  List<Ingredient> _results = [];
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;
+  String? get userId => user?.uid;
+  
   @override
   void initState() {
     super.initState();
-
-    _controller.addListener(_onTextChanged);
   }
 
   @override
@@ -37,22 +43,31 @@ class _SearchBarViewState extends State<SearchBarView> {
     super.dispose();
   }
 
-  void _onTextChanged() async {
+  Future<void> _addIngredient() async {
     final String value = _controller.text;
 
-    final QuerySnapshot snapshot = await _firestore.collection('ingredients').where('name', isGreaterThanOrEqualTo: value).get();
+    final ingredient = Ingredient(name: value);
+    // Retrieve the current CurrentDrinkRequest document
+    QuerySnapshot querySnapshot = await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').get();
 
-    final List<Ingredient> results = snapshot.docs.map((doc) {
-      if (doc.exists) {
-        return Ingredient.fromJson(doc.data() as Map<String, dynamic>);
-      } else {
-        return null;
-      }
-    }).where((ingredient) => ingredient != null).cast<Ingredient>().toList();
+    CurrentDrinkRequest currentDrinkRequest;
 
-    setState(() {
-      _results = results;
-    });
+    if (querySnapshot.docs.isNotEmpty) {
+      // If a CurrentDrinkRequest document exists, create a CurrentDrinkRequest object from the document
+      currentDrinkRequest = CurrentDrinkRequest.fromJson(querySnapshot.docs.first.data() as Map<String, dynamic>);
+    } else {
+      // If no CurrentDrinkRequest document exists, create a new CurrentDrinkRequest object
+      currentDrinkRequest = CurrentDrinkRequest(ingredients: [], optionalPreferences: "", alcoholStrength:"");
+    }
+
+    // Add the new ingredient to the CurrentDrinkRequest object
+    currentDrinkRequest.ingredients.add(ingredient.name);
+    
+    // Write the CurrentDrinkRequest object to Firestore
+    await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set(currentDrinkRequest.toJson());
+
+
+    _controller.clear();
   }
 
   @override
@@ -71,42 +86,63 @@ class _SearchBarViewState extends State<SearchBarView> {
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 24, right: 24, top: 8, bottom: 8),
-                    child: TextField(
-                      controller: _controller,
-                      style: TextStyle(
-                        fontFamily: MixyAppTheme.fontName,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
-                        color: MixyAppTheme.darkText,
-                      ),
-                      decoration: InputDecoration(
-                        labelText: 'Add Your Ingredient Here',
-                        fillColor: MixyAppTheme.background,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              25.0), // Increase this value for more rounded corners
-                          borderSide: BorderSide.none,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: AutoCompleteTextField<Ingredient>(
+                            key: key,
+                            suggestions: _results,
+                            itemFilter: (item, query) {
+                              return item.name.toLowerCase().startsWith(query.toLowerCase());
+                            },
+                            itemSorter: (a, b) {
+                              return a.name.compareTo(b.name);
+                            },
+                            itemBuilder: (context, item) {
+                              return Container(
+                                padding: EdgeInsets.all(20.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      item.name,
+                                      style: TextStyle(color: Colors.black),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                            controller: _controller,
+                            style: TextStyle(
+                              fontFamily: MixyAppTheme.fontName,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16,
+                              color: MixyAppTheme.darkText,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Add Your Ingredient Here',
+                              fillColor: MixyAppTheme.background,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    25.0), // Increase this value for more rounded corners
+                                borderSide: BorderSide.none,
+                              ),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: MixyAppTheme.darkText,
+                              ),
+                            ), itemSubmitted: (item) { 
+                                _controller.text = item.name;
+                             },
+                          ),
                         ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: MixyAppTheme.darkText,
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: _addIngredient,
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _results.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final Ingredient ingredient = _results[index];
-
-                    return ListTile(
-                      title: Text(ingredient.name),
-                      // ... other properties ...
-                    );
-                  },
                 ),
               ],
             ),

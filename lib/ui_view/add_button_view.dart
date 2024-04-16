@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../mixy_app_theme.dart';
 
 class AddButtonView extends StatefulWidget {
@@ -17,7 +18,10 @@ class _AddButtonViewState extends State<AddButtonView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
   List<bool> toggleStates = [];
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;
+  String? get userId => user?.uid;
+  
   List<String> areaListData = <String>[
     'assets/mixy_app/snack.png',
     'assets/mixy_app/mixyLogo.png',
@@ -110,6 +114,33 @@ class _AddButtonViewState extends State<AddButtonView>
                             // this allows turning an option off by clicking on it again
                             // NECESSARY FOR SINGLE SELECTION; USERS CAN OPT FOR NO OPTIONS...
                             toggleStates[index] = !isCurrentlyToggled;
+                            if (toggleStates[0] == true){
+                              _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set({
+                                'OptionalPreferences': 'Sweet'
+                              }, SetOptions(merge: true));
+                            } else if (toggleStates[1] == true){
+                              _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set({
+                                'OptionalPreferences': 'Sour'
+                              }, SetOptions(merge: true));
+                            } else if (toggleStates[2] == true){
+                              _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set({
+                                'OptionalPreferences': 'Bitter'
+                              }, SetOptions(merge: true));
+                            }
+
+                            if (toggleStates[3] == true){
+                              _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set({
+                                'AlcoholStrength': 'Low'
+                              }, SetOptions(merge: true));
+                            } else if (toggleStates[4] == true){
+                              _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set({
+                                'AlcoholStrength': 'Medium'
+                              }, SetOptions(merge: true));
+                            } else if (toggleStates[5] == true){
+                              _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set({
+                                'AlcoholStrength': 'High'
+                              }, SetOptions(merge: true));
+                            }
 
                             // prints the index of the toggled item (debugging purposes)
                             print('Item $index was toggled!');

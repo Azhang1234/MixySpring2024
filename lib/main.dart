@@ -24,9 +24,14 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+    MyApp({Key? key}) : super(key: key);
   final FirebaseAuth _auth = FirebaseAuth.instance; // Create FirebaseAuth instance
-  
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Create Firestore instance
+
+  Future<void> storeUserId(String userId) async {
+    await _firestore.collection('Users').doc(userId).set({});
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,6 +47,8 @@ class MyApp extends StatelessWidget {
             return const CircularProgressIndicator(); 
           } else {
             if (snapshot.hasData) {
+              // User is signed in, store their user ID in Firestore
+              storeUserId(snapshot.data!.uid);
               return const MixyAppHomeScreen(); 
             } else {
               return SignInScreen(); 
