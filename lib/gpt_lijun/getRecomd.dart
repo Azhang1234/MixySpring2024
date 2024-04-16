@@ -4,9 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<String> getCocktailRecommendation({
   required List<String> ingredients,
-  String? typeOfAlcohol,
-  String? occasion,
-  String? complexity,
+  String? optionalPreferences,
+  String? alcoholStrength,
 }) async {
   await dotenv.load();
   final apiKey = dotenv.env['OPENAI_API_KEY']!; // Replace with your actual API key
@@ -14,14 +13,11 @@ Future<String> getCocktailRecommendation({
 
   // Formatting the prompt based on the parameters provided
   String prompt = "Given that I have ${ingredients.join(', ')}";
-  if (typeOfAlcohol != null) {
-    prompt += " and prefer $typeOfAlcohol based cocktails";
+  if (optionalPreferences != null) {
+    prompt += " and prefer $optionalPreferences based cocktails";
   }
-  if (occasion != null) {
-    prompt += " for a $occasion";
-  }
-  if (complexity != null) {
-    prompt += ". I'm looking for difficulty level of $complexity to make";
+  if (alcoholStrength != null) {
+    prompt += " for a $alcoholStrength alcoholic strength drink" ;
   }
   prompt +=
       ", could you recommend a cocktail and provide the steps to make it?";

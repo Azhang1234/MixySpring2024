@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 import 'package:mixyspring2024/mixy_app_theme.dart';
 import 'package:mixyspring2024/models/ingredients.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class SearchBarView extends StatefulWidget {
   final AnimationController? animationController;
@@ -27,7 +28,7 @@ class _SearchBarViewState extends State<SearchBarView> {
   GlobalKey<AutoCompleteTextFieldState<Ingredient>> key = GlobalKey();
   
   List<Ingredient> _results = [];
-  User? get user => FirebaseAuth.instance.currentUser;
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;
   String? get userId => user?.uid;
   
   @override
@@ -46,8 +47,25 @@ class _SearchBarViewState extends State<SearchBarView> {
     final String value = _controller.text;
 
     final ingredient = Ingredient(name: value);
+    // Retrieve the current CurrentDrinkRequest document
+    QuerySnapshot querySnapshot = await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').get();
 
-    await _firestore.collection('Users').doc(userId).collection('Ingredients').add(ingredient.toJson());
+    CurrentDrinkRequest currentDrinkRequest;
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // If a CurrentDrinkRequest document exists, create a CurrentDrinkRequest object from the document
+      currentDrinkRequest = CurrentDrinkRequest.fromJson(querySnapshot.docs.first.data() as Map<String, dynamic>);
+    } else {
+      // If no CurrentDrinkRequest document exists, create a new CurrentDrinkRequest object
+      currentDrinkRequest = CurrentDrinkRequest(ingredients: [], optionalPreferences: "", alcoholStrength:"");
+    }
+
+    // Add the new ingredient to the CurrentDrinkRequest object
+    currentDrinkRequest.ingredients.add(ingredient.name);
+    
+    // Write the CurrentDrinkRequest object to Firestore
+    await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set(currentDrinkRequest.toJson());
+
 
     _controller.clear();
   }

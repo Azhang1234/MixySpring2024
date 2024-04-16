@@ -137,7 +137,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
           Navigator.push(context, MaterialPageRoute(builder: (context) => NewScreen()),);
           
           // LETTING GPT DO ITS THING (BUT IT COSTS MONEY SO LEAVE IT COMMENTED OUT FOR NOW)
-          //CallGPT();
+          CallGPT();
         },
         child: Ink(
           decoration: BoxDecoration(
@@ -218,10 +218,9 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
   void CallGPT() async {
     final dataManager = DataManager();
-    var user = await dataManager.getUser();
-    var drinks = await dataManager.getDrinks();
+    //var drinks = await dataManager.getDrinks();
     var currentDrinkRequest = await dataManager.getCurrentDrinkRequest();
-    drinks.forEach(print);
+    //drinks.forEach(print);
     print(currentDrinkRequest);
 
     // demo of gpt writing into local json file
@@ -229,9 +228,8 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     String cocktailRecommendation = '';
     cocktailRecommendation = await getCocktailRecommendation(
       ingredients: currentDrinkRequest.ingredients,
-      typeOfAlcohol: currentDrinkRequest.typesOfAlcohol,
-      occasion: currentDrinkRequest.occasion,
-      complexity: currentDrinkRequest.complexity,
+      optionalPreferences: currentDrinkRequest.optionalPreferences,
+      alcoholStrength: currentDrinkRequest.alcoholStrength,
     );
     print(cocktailRecommendation);
     //store into local json file
