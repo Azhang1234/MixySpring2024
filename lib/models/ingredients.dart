@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Ingredient {
   final String name;
   // ... other properties ...
@@ -19,4 +21,11 @@ class Ingredient {
       // ... other properties ...
     };
   }
+    factory Ingredient.fromSnapshot(DocumentSnapshot snapshot) {
+    return Ingredient(
+      name: snapshot['name'],
+      // Initialize other properties from the snapshot as needed
+    );
+  }
+
 }

@@ -9,12 +9,14 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 class SearchBarView extends StatefulWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
-  
+  final ValueChanged<Ingredient> onIngredientAdded; // Add this line
+
 
   SearchBarView({
     Key? key,
     this.animationController,
     this.animation,
+    required this.onIngredientAdded, // Add this line
   }) : super(key: key);
 
   @override
@@ -30,7 +32,6 @@ class _SearchBarViewState extends State<SearchBarView> {
   List<Ingredient> _results = [];
   auth.User? get user => auth.FirebaseAuth.instance.currentUser;
   String? get userId => user?.uid;
-  
   @override
   void initState() {
     super.initState();
@@ -43,10 +44,13 @@ class _SearchBarViewState extends State<SearchBarView> {
     super.dispose();
   }
 
-  Future<void> _addIngredient() async {
+  Future<void> _addIngredientToAvailableIngredients() async {
     final String value = _controller.text;
 
     final ingredient = Ingredient(name: value);
+
+    widget.onIngredientAdded(ingredient);
+
     // Retrieve the current CurrentDrinkRequest document
     QuerySnapshot querySnapshot = await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').get();
 
@@ -62,7 +66,8 @@ class _SearchBarViewState extends State<SearchBarView> {
 
     // Add the new ingredient to the CurrentDrinkRequest object
     currentDrinkRequest.ingredients.add(ingredient.name);
-    
+    await _firestore.collection('Users').doc(userId).collection('AvailableIngredients').add(ingredient.toJson());
+
     // Write the CurrentDrinkRequest object to Firestore
     await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set(currentDrinkRequest.toJson());
 
@@ -138,7 +143,7 @@ class _SearchBarViewState extends State<SearchBarView> {
                         ),
                         IconButton(
                           icon: Icon(Icons.add),
-                          onPressed: _addIngredient,
+                          onPressed: _addIngredientToAvailableIngredients,
                         ),
                       ],
                     ),

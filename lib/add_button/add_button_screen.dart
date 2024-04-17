@@ -17,15 +17,48 @@ class AddButtonScreen extends StatefulWidget {
 }
 
 // this is the screen widget that pops up after clicking "Mix it Up!"
-class NewScreen extends StatelessWidget {
+class NewScreen extends StatefulWidget {
+  final Drink drink;
+
+  NewScreen({required this.drink});
+
+  @override
+  _NewScreenState createState() => _NewScreenState();
+}
+
+class _NewScreenState extends State<NewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Screen"),
+        title: Text(widget.drink.name),
       ),
-      body: Center(
-        child: Text("This is a new screen!"),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Ingredients:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            for (var ingredient in widget.drink.ingredients)
+              Text('- $ingredient'),
+            SizedBox(height: 20),
+            Text(
+              'Instructions:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(widget.drink.instructions),
+            SizedBox(height: 20),
+            Text(
+              'Equipment:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            for (var equipment in widget.drink.equipments)
+              Text('- $equipment'),
+          ],
+        ),
       ),
     );
   }
@@ -132,12 +165,14 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
           // dimiss dialog
           Navigator.of(context, rootNavigator: true).pop();
-
-          // navigate to the new screen
-          Navigator.push(context, MaterialPageRoute(builder: (context) => NewScreen()),);
           
           // LETTING GPT DO ITS THING (BUT IT COSTS MONEY SO LEAVE IT COMMENTED OUT FOR NOW)
-          CallGPT();
+          final drink = await CallGPT();
+
+          Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NewScreen(drink: drink)),
+        );
         },
         child: Ink(
           decoration: BoxDecoration(
@@ -186,10 +221,10 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
   Drink processRawStringToDrink(String rawString) {
     // Define regex patterns to extract information
-    final namePattern = RegExp(r"is a (.+?)\. Here\'s how to make it:");
-    final ingredientsPattern = RegExp(r'Ingredients:\n- (.+?)\n\nInstructions:', dotAll: true);
-    final instructionsPattern = RegExp(r'Instructions:\n(.+?)\n\n', dotAll: true);
-    final equipmentPattern = RegExp(r'Equipment:\n- (.+?)\n\n',dotAll: true);
+    final namePattern = RegExp(r"is a (.+?)\. Here's how to make it:");
+    final ingredientsPattern = RegExp(r'Ingredients:\s+- (.+?)\n\nInstructions:', dotAll: true);
+    final instructionsPattern = RegExp(r'Instructions:\s+(.+?)\n\n', dotAll: true);
+    final equipmentPattern = RegExp(r'Equipment:\s+- (.+?)(\n\n|$)', dotAll: true);
 
     // extracting information using regex
     final nameMatches = namePattern.firstMatch(rawString);
@@ -216,7 +251,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     return newDrink;
   }
 
-  void CallGPT() async {
+  Future<Drink> CallGPT() async {
     final dataManager = DataManager();
     //var drinks = await dataManager.getDrinks();
     var currentDrinkRequest = await dataManager.getCurrentDrinkRequest();
@@ -242,6 +277,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
       listViews.clear();
       addAllListData();
     });
+    return drink;
   }
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
