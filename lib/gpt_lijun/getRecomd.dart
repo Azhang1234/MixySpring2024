@@ -30,9 +30,9 @@ Future<String> getCocktailRecommendation({
 
   // Set up the body
   final body = jsonEncode({
-    'model':
-        'gpt-3.5-turbo', // You can replace this with "text-davinci-004" for the latest model
+    'model': 'gpt-3.5-turbo',
     'messages': [
+      {'role': 'system', 'content': 'You are a helpful assistant that provides cocktail recipes. When providing a recipe, please format it as follows: "The cocktail is a (.+?)\\. Here\'s how to make it: Ingredients:\\s+- (.+?)\\n\\nInstructions:\\s+(.+?)\\n\\nEquipment:\\s+- (.+?)\\n\\n"'},
       {'role': 'user', 'content': prompt},
     ],
   });

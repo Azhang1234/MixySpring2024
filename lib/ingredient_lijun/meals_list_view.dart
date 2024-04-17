@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mixyspring2024/models/ingredients.dart';
 import '../../main.dart';
 import '../mixy_app_theme.dart';
 import '../models/meals_list_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class IngredientSelectView extends StatefulWidget {
-  const IngredientSelectView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
-      : super(key: key);
+  const IngredientSelectView({
+    Key? key,
+    this.mainScreenAnimationController,
+    this.mainScreenAnimation,
+  }) : super(key: key);
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
+
 
   @override
   _IngredientSelectViewState createState() => _IngredientSelectViewState();
@@ -18,8 +24,10 @@ class IngredientSelectView extends StatefulWidget {
 class _IngredientSelectViewState extends State<IngredientSelectView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<MealsListData> mealsListData = MealsListData.tabIconsList;
-
+  late List<Ingredient> ingredients;
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
+  String? get userId => user?.uid;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   @override
   void initState() {
     animationController = AnimationController(
@@ -27,9 +35,10 @@ class _IngredientSelectViewState extends State<IngredientSelectView>
     super.initState();
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
+  Stream<List<Ingredient>> getIngredients() {
+    return firestore.collection('Users').doc(userId).collection("AvailableIngredients").snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) => Ingredient.fromSnapshot(doc)).toList();
+    });
   }
 
   @override
@@ -40,185 +49,104 @@ class _IngredientSelectViewState extends State<IngredientSelectView>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: widget.mainScreenAnimationController!,
-      builder: (BuildContext context, Widget? child) {
-        return FadeTransition(
-          opacity: widget.mainScreenAnimation!,
-          child: Transform(
-            transform: Matrix4.translationValues(
-                0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
-            child: SizedBox(
-              height: 216,
-              width: double.infinity,
-              child: ListView.builder(
-                padding: const EdgeInsets.only(
-                    top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: mealsListData.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  final int count =
-                      mealsListData.length > 10 ? 10 : mealsListData.length;
-                  final Animation<double> animation =
-                      Tween<double>(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                              parent: animationController!,
-                              curve: Interval((1 / count) * index, 1.0,
-                                  curve: Curves.fastOutSlowIn)));
-                  animationController?.forward();
+    return StreamBuilder<List<Ingredient>>(
+      stream: getIngredients(),
+      builder: (BuildContext context, AsyncSnapshot<List<Ingredient>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          ingredients = snapshot.data!;
+          return AnimatedBuilder(
+            animation: widget.mainScreenAnimationController!,
+            builder: (BuildContext context, Widget? child) {
+              return FadeTransition(
+                opacity: widget.mainScreenAnimation!,
+                child: Transform(
+                  transform: Matrix4.translationValues(
+                      0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
+                  child: SizedBox(
+                    height: 216,
+                    width: double.infinity,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.only(
+                          top: 0, bottom: 0, right: 16, left: 16),
+                      itemCount: ingredients.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        final int count =
+                            ingredients.length > 10 ? 10 : ingredients.length;
+                        final Animation<double> animation =
+                            Tween<double>(begin: 0.0, end: 1.0).animate(
+                                CurvedAnimation(
+                                    parent: animationController!,
+                                    curve: Interval((1 / count) * index, 1.0,
+                                        curve: Curves.fastOutSlowIn)));
+                        animationController?.forward();
 
-                  return MealsView(
-                    mealsListData: mealsListData[index],
-                    animation: animation,
-                    animationController: animationController!,
-                  );
-                },
-              ),
-            ),
-          ),
-        );
+                        return IngredientView(
+                          ingredient: ingredients[index],
+                          animation: animation,
+                          animationController: animationController!,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        }
       },
     );
   }
 }
 
-class MealsView extends StatelessWidget {
-  const MealsView(
-      {Key? key, this.mealsListData, this.animationController, this.animation})
-      : super(key: key);
+class IngredientView extends StatelessWidget {
+  const IngredientView({
+    Key? key,
+    required this.animationController,
+    required this.animation,
+    required this.ingredient,
+  }) : super(key: key);
 
-  final MealsListData? mealsListData;
-  final AnimationController? animationController;
-  final Animation<double>? animation;
+  final AnimationController animationController;
+  final Animation<double> animation;
+  final Ingredient ingredient;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController!,
+      animation: animationController,
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
-          opacity: animation!,
+          opacity: animation,
           child: Transform(
             transform: Matrix4.translationValues(
-                100 * (1.0 - animation!.value), 0.0, 0.0),
+                100 * (1.0 - animation.value), 0.0, 0.0),
             child: SizedBox(
               width: 130,
               child: Stack(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 32, left: 8, right: 8, bottom: 16),
+                  Card(
                     child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: HexColor(mealsListData!.endColor)
-                                  .withOpacity(0.6),
-                              offset: const Offset(1.1, 4.0),
-                              blurRadius: 8.0),
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            ingredient.name,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          // Add more details about the ingredient here
                         ],
-                        gradient: LinearGradient(
-                          colors: <HexColor>[
-                            HexColor(mealsListData!.startColor),
-                            HexColor(mealsListData!.endColor),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          bottomRight: Radius.circular(8.0),
-                          bottomLeft: Radius.circular(8.0),
-                          topLeft: Radius.circular(8.0),
-                          topRight: Radius.circular(54.0),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 54, left: 16, right: 16, bottom: 8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              mealsListData!.titleTxt,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontFamily: MixyAppTheme.fontName,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                                letterSpacing: 0.2,
-                                color: MixyAppTheme.white,
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 8, bottom: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      mealsListData!.meals!.join('\n'),
-                                      style: const TextStyle(
-                                        fontFamily: MixyAppTheme.fontName,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10,
-                                        letterSpacing: 0.2,
-                                        color: MixyAppTheme.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: MixyAppTheme.nearlyWhite,
-                                shape: BoxShape.circle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: MixyAppTheme.nearlyBlack
-                                          .withOpacity(0.4),
-                                      offset: const Offset(8.0, 8.0),
-                                      blurRadius: 8.0),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.add,
-                                  color: HexColor(mealsListData!.endColor),
-                                  size: 24,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    child: Container(
-                      width: 84,
-                      height: 84,
-                      decoration: BoxDecoration(
-                        color: MixyAppTheme.nearlyWhite.withOpacity(0.2),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 8,
-                    child: SizedBox(
-                      width: 80,
-                      height: 80,
-                      child: Image.asset(mealsListData!.imagePath),
-                    ),
-                  )
                 ],
               ),
             ),
