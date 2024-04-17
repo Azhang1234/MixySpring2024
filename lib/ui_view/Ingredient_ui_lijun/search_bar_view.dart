@@ -50,28 +50,7 @@ class _SearchBarViewState extends State<SearchBarView> {
     final ingredient = Ingredient(name: value);
 
     widget.onIngredientAdded(ingredient);
-
-    // Retrieve the current CurrentDrinkRequest document
-    QuerySnapshot querySnapshot = await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').get();
-
-    CurrentDrinkRequest currentDrinkRequest;
-
-    if (querySnapshot.docs.isNotEmpty) {
-      // If a CurrentDrinkRequest document exists, create a CurrentDrinkRequest object from the document
-      currentDrinkRequest = CurrentDrinkRequest.fromJson(querySnapshot.docs.first.data() as Map<String, dynamic>);
-    } else {
-      // If no CurrentDrinkRequest document exists, create a new CurrentDrinkRequest object
-      currentDrinkRequest = CurrentDrinkRequest(ingredients: [], optionalPreferences: "", alcoholStrength:"");
-    }
-
-    // Add the new ingredient to the CurrentDrinkRequest object
-    currentDrinkRequest.ingredients.add(ingredient.name);
     await _firestore.collection('Users').doc(userId).collection('AvailableIngredients').add(ingredient.toJson());
-
-    // Write the CurrentDrinkRequest object to Firestore
-    await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set(currentDrinkRequest.toJson());
-
-
     _controller.clear();
   }
 

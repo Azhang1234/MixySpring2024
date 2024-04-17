@@ -119,16 +119,6 @@ class _UserProfileScreenState extends State<UserProfileScreen>
       ),
     );
 
-    listViews.add(
-      AreaListView(
-        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-                parent: widget.animationController!,
-                curve: const Interval((1 / count) * 2, 1.0,
-                    curve: Curves.fastOutSlowIn))),
-        mainScreenAnimationController: widget.animationController!,
-      ),
-    );
   }
 
   Future<bool> getData() async {
