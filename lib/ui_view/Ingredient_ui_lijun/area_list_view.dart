@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../mixy_app_theme.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class AreaListView extends StatefulWidget {
   const AreaListView(
@@ -16,12 +18,9 @@ class AreaListView extends StatefulWidget {
 class _AreaListViewState extends State<AreaListView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<String> areaListData = <String>[
-    'assets/mixy_app/mixyLogo.png',
-    'assets/mixy_app/mixyLogo.png',
-    'assets/mixy_app/mixyLogo.png',
-    'assets/mixy_app/mixyLogo.png',
-  ];
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;
+  String? get userId => user?.uid;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -38,53 +37,64 @@ class _AreaListViewState extends State<AreaListView>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: widget.mainScreenAnimationController!,
-      builder: (BuildContext context, Widget? child) {
-        return FadeTransition(
-          opacity: widget.mainScreenAnimation!,
-          child: Transform(
-            transform: Matrix4.translationValues(
-                0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: GridView(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 16, bottom: 16),
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 24.0,
-                    crossAxisSpacing: 24.0,
-                    childAspectRatio: 1.0,
-                  ),
-                  children: List<Widget>.generate(
-                    areaListData.length,
-                    (int index) {
-                      final int count = areaListData.length;
-                      final Animation<double> animation =
-                          Tween<double>(begin: 0.0, end: 1.0).animate(
-                        CurvedAnimation(
-                          parent: animationController!,
-                          curve: Interval((1 / count) * index, 1.0,
-                              curve: Curves.fastOutSlowIn),
-                        ),
-                      );
-                      animationController?.forward();
-                      return AreaView(
-                        imagepath: areaListData[index],
-                        animation: animation,
-                        animationController: animationController!,
-                      );
-                    },
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+
+        final ingredients = snapshot.data!.data()!['Ingredients'] as List<dynamic>;
+
+        return AnimatedBuilder(
+          animation: widget.mainScreenAnimationController!,
+          builder: (BuildContext context, Widget? child) {
+            return FadeTransition(
+              opacity: widget.mainScreenAnimation!,
+              child: Transform(
+                transform: Matrix4.translationValues(
+                    0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    child: GridView(
+                      padding: const EdgeInsets.only(
+                          left: 16, right: 16, top: 16, bottom: 16),
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 24.0,
+                        crossAxisSpacing: 24.0,
+                        childAspectRatio: 1.0,
+                      ),
+                      children: List<Widget>.generate(
+                        ingredients.length,
+                        (int index) {
+                          final int count = ingredients.length;
+                          final Animation<double> animation =
+                              Tween<double>(begin: 0.0, end: 1.0).animate(
+                            CurvedAnimation(
+                              parent: animationController!,
+                              curve: Interval((1 / count) * index, 1.0,
+                                  curve: Curves.fastOutSlowIn),
+                            ),
+                          );
+                          animationController?.forward();
+                          return AreaView(
+                            ingredientName: ingredients[index],
+                            animation: animation,
+                            animationController: animationController!,
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
@@ -94,12 +104,12 @@ class _AreaListViewState extends State<AreaListView>
 class AreaView extends StatelessWidget {
   const AreaView({
     Key? key,
-    this.imagepath,
+    this.ingredientName,
     this.animationController,
     this.animation,
   }) : super(key: key);
 
-  final String? imagepath;
+  final String? ingredientName;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -130,7 +140,7 @@ class AreaView extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.asset(imagepath!),
+                      child: Text(ingredientName!),
                     ),
                   ),
                   Positioned(

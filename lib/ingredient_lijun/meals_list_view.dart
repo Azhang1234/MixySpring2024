@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 import 'package:mixyspring2024/models/ingredients.dart';
 import '../../main.dart';
 import '../mixy_app_theme.dart';
@@ -28,6 +29,15 @@ class _IngredientSelectViewState extends State<IngredientSelectView>
   auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
   String? get userId => user?.uid;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  List<Ingredient> selectedIngredients = [];
+
+  void _addIngredientToSelectedIngredients(Ingredient ingredient) {
+    setState(() {
+      selectedIngredients.add(ingredient);
+    });
+  }
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -115,6 +125,46 @@ class IngredientView extends StatelessWidget {
   final Animation<double> animation;
   final Ingredient ingredient;
 
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
+  String? get userId => user?.uid;
+
+  Future<void> _addIngredientToCurrentRequest(String value) async {
+
+    final ingredient = Ingredient(name: value);
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+
+    // Retrieve the current CurrentDrinkRequest document
+    QuerySnapshot querySnapshot = await firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').get();
+
+    CurrentDrinkRequest currentDrinkRequest;
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // If a CurrentDrinkRequest document exists, create a CurrentDrinkRequest object from the document
+      currentDrinkRequest = CurrentDrinkRequest.fromJson(querySnapshot.docs.first.data() as Map<String, dynamic>);
+    } else {
+      // If no CurrentDrinkRequest document exists, create a new CurrentDrinkRequest object
+      currentDrinkRequest = CurrentDrinkRequest(ingredients: [], optionalPreferences: "", alcoholStrength:"");
+    }
+
+    // Add the new ingredient to the CurrentDrinkRequest object
+    currentDrinkRequest.ingredients.add(ingredient.name);
+
+    // Write the CurrentDrinkRequest object to Firestore
+    await firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set(currentDrinkRequest.toJson());
+
+  }
+
+  Future<void> _removeIngredientFromAvaialbleIngredients(String value) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final querySnapshot = await firestore.collection('Users').doc(userId).collection('AvailableIngredients').where('name', isEqualTo: value).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docId = querySnapshot.docs.first.id;
+      await firestore.collection('Users').doc(userId).collection('AvailableIngredients').doc(docId).delete();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -125,26 +175,57 @@ class IngredientView extends StatelessWidget {
           child: Transform(
             transform: Matrix4.translationValues(
                 100 * (1.0 - animation.value), 0.0, 0.0),
-            child: SizedBox(
+            child: Container(
               width: 130,
               child: Stack(
                 children: <Widget>[
                   Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    elevation: 10,
                     child: Container(
                       padding: EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            ingredient.name,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                ingredient.name,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                           // Add more details about the ingredient here
                         ],
                       ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 10,
+                    top: 10,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        _addIngredientToCurrentRequest(ingredient.name);
+                      },
+                      child: Icon(Icons.add),
+                      mini: true,
+                    ),
+                  ),
+                  Positioned(
+                    left: 10,
+                    top: 10,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        _removeIngredientFromAvaialbleIngredients(ingredient.name);
+                      },
+                      child: Icon(Icons.remove),
+                      mini: true,
                     ),
                   ),
                 ],
