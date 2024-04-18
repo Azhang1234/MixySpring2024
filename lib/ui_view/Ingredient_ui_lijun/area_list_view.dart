@@ -34,6 +34,19 @@ class _AreaListViewState extends State<AreaListView>
     animationController?.dispose();
     super.dispose();
   }
+  Future<void> _removeIngredientFromCurrentRequest(String ingredientName) async {
+    // Retrieve the current CurrentDrinkRequest document
+    DocumentSnapshot<Map<String, dynamic>> docSnapshot = await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).get();
+
+    Map<String, dynamic> data = docSnapshot.data()!;
+    List<dynamic> ingredients = data['Ingredients'];
+
+    // Remove the ingredient from the list
+    ingredients.remove(ingredientName);
+
+    // Update the CurrentDrinkRequest document
+    await _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).update({'Ingredients': ingredients});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +99,7 @@ class _AreaListViewState extends State<AreaListView>
                             ingredientName: ingredients[index],
                             animation: animation,
                             animationController: animationController!,
+                            onRemove: () => _removeIngredientFromCurrentRequest(ingredients[index]),
                           );
                         },
                       ),
@@ -107,12 +121,13 @@ class AreaView extends StatelessWidget {
     this.ingredientName,
     this.animationController,
     this.animation,
+    this.onRemove,
   }) : super(key: key);
 
   final String? ingredientName;
   final AnimationController? animationController;
   final Animation<double>? animation;
-
+  final VoidCallback? onRemove;
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -156,6 +171,15 @@ class AreaView extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 10,
+                    top: 10,
+                    child: FloatingActionButton(
+                      onPressed: onRemove,
+                      child: Icon(Icons.remove),
+                      mini: true,
                     ),
                   ),
                 ],
