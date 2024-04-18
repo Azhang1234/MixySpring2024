@@ -90,6 +90,9 @@ class _IngredientScreenState extends State<IngredientScreen>
       ),
     );
 
+    // this is to add buffer space on the page
+    listViews.add(SizedBox(height: 40));
+
     listViews.add(
       TitleView(
         titleTxt: 'Ingredients Cabinet',

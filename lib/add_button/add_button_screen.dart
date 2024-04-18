@@ -111,7 +111,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     listViews.add(
       TitleView(
         titleTxt: 'Select your Drink Options:',
-        subTxt: 'Details',
+        // subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve:
@@ -135,7 +135,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     listViews.add(
       TitleView(
         titleTxt: 'Generate a Mixy Drink!',
-        subTxt: 'more',
+        // subTxt: 'more',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve:
@@ -385,67 +385,67 @@ class _AddButtonScreenState extends State<AddButtonScreen>
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () {},
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_left,
-                                    color: MixyAppTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(
-                                left: 8,
-                                right: 8,
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 8),
-                                    child: Icon(
-                                      Icons.calendar_today,
-                                      color: MixyAppTheme.grey,
-                                      size: 18,
-                                    ),
-                                  ),
-                                  Text(
-                                    '15 May',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontFamily: MixyAppTheme.fontName,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 18,
-                                      letterSpacing: -0.2,
-                                      color: MixyAppTheme.darkerText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () {},
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: MixyAppTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 38,
+                            //   width: 38,
+                            //   child: InkWell(
+                            //     highlightColor: Colors.transparent,
+                            //     borderRadius: const BorderRadius.all(
+                            //         Radius.circular(32.0)),
+                            //     onTap: () {},
+                            //     child: const Center(
+                            //       child: Icon(
+                            //         Icons.keyboard_arrow_left,
+                            //         color: MixyAppTheme.grey,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // const Padding(
+                            //   padding: EdgeInsets.only(
+                            //     left: 8,
+                            //     right: 8,
+                            //   ),
+                            //   child: Row(
+                            //     children: <Widget>[
+                            //       Padding(
+                            //         padding: EdgeInsets.only(right: 8),
+                            //         child: Icon(
+                            //           Icons.calendar_today,
+                            //           color: MixyAppTheme.grey,
+                            //           size: 18,
+                            //         ),
+                            //       ),
+                            //       Text(
+                            //         '',
+                            //         textAlign: TextAlign.left,
+                            //         style: TextStyle(
+                            //           fontFamily: MixyAppTheme.fontName,
+                            //           fontWeight: FontWeight.normal,
+                            //           fontSize: 18,
+                            //           letterSpacing: -0.2,
+                            //           color: MixyAppTheme.darkerText,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 38,
+                            //   width: 38,
+                            //   child: InkWell(
+                            //     highlightColor: Colors.transparent,
+                            //     borderRadius: const BorderRadius.all(
+                            //         Radius.circular(32.0)),
+                            //     onTap: () {},
+                            //     child: const Center(
+                            //       child: Icon(
+                            //         Icons.keyboard_arrow_right,
+                            //         color: MixyAppTheme.grey,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       )

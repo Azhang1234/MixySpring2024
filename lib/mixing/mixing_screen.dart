@@ -235,51 +235,51 @@ class _MixingScreenState extends State<MixingScreen>
                                 ),
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(
-                                left: 8,
-                                right: 8,
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 8),
-                                    child: Icon(
-                                      Icons.calendar_today,
-                                      color: MixyAppTheme.grey,
-                                      size: 18,
-                                    ),
-                                  ),
-                                  Text(
-                                    '15 May',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                      fontFamily: MixyAppTheme.fontName,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 18,
-                                      letterSpacing: -0.2,
-                                      color: MixyAppTheme.darkerText,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 38,
-                              width: 38,
-                              child: InkWell(
-                                highlightColor: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(32.0)),
-                                onTap: () {},
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: MixyAppTheme.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // const Padding(
+                            //   padding: EdgeInsets.only(
+                            //     left: 8,
+                            //     right: 8,
+                            //   ),
+                            //   child: Row(
+                            //     children: <Widget>[
+                            //       Padding(
+                            //         padding: EdgeInsets.only(right: 8),
+                            //         child: Icon(
+                            //           Icons.calendar_today,
+                            //           color: MixyAppTheme.grey,
+                            //           size: 18,
+                            //         ),
+                            //       ),
+                            //       Text(
+                            //         '15 May',
+                            //         textAlign: TextAlign.left,
+                            //         style: TextStyle(
+                            //           fontFamily: MixyAppTheme.fontName,
+                            //           fontWeight: FontWeight.normal,
+                            //           fontSize: 18,
+                            //           letterSpacing: -0.2,
+                            //           color: MixyAppTheme.darkerText,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: 38,
+                            //   width: 38,
+                            //   child: InkWell(
+                            //     highlightColor: Colors.transparent,
+                            //     borderRadius: const BorderRadius.all(
+                            //         Radius.circular(32.0)),
+                            //     onTap: () {},
+                            //     child: const Center(
+                            //       child: Icon(
+                            //         Icons.keyboard_arrow_right,
+                            //         color: MixyAppTheme.grey,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       )

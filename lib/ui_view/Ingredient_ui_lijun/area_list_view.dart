@@ -77,9 +77,9 @@ class _AreaListViewState extends State<AreaListView>
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 24.0,
-                        crossAxisSpacing: 24.0,
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 12.0,
+                        crossAxisSpacing: 12.0,
                         childAspectRatio: 1.0,
                       ),
                       children: List<Widget>.generate(
@@ -140,7 +140,12 @@ class AreaView extends StatelessWidget {
                 0.0, 50 * (1.0 - animation!.value), 0.0),
             child: Container(
               decoration: BoxDecoration(
-                color: MixyAppTheme.white,
+                // color: MixyAppTheme.white,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.orange, Colors.deepOrange],
+                ),
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
@@ -155,7 +160,11 @@ class AreaView extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text(ingredientName!),
+                      child: Text(
+                        ingredientName!,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        )),
                     ),
                   ),
                   Positioned(
@@ -164,7 +173,7 @@ class AreaView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Your Text Here",
+                        "",
                         style: TextStyle(
                           color: Color.fromARGB(255, 93, 89,
                               80), // Choose a color that stands out
@@ -174,8 +183,8 @@ class AreaView extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    right: 10,
-                    top: 10,
+                    right: 1,
+                    top: 1,
                     child: FloatingActionButton(
                       onPressed: onRemove,
                       child: Icon(Icons.remove),
