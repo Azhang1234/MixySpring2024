@@ -44,10 +44,7 @@ jobs:
       with:
         name: release-apk
         path: build/app/outputs/flutter-apk/app-release.apk
-    - uses: actions/upload-artifact@v1
-      with:
-        name: armeabi-release-apk
-        path: build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+
 
         
 #  code-coverage:
