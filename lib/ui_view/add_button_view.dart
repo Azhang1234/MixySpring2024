@@ -31,6 +31,15 @@ class _AddButtonViewState extends State<AddButtonView>
     'assets/mixy_app/snack.png'
   ];
 
+  List<String> buttonTextData = <String>[
+    'Sweet',
+    'Sour',
+    'Non-alcoholic',
+    'Low   ABV',
+    'Medium ABV',
+    'High ABV',
+  ];
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -145,7 +154,7 @@ class _AddButtonViewState extends State<AddButtonView>
                             // prints the index of the toggled item (debugging purposes)
                             print('Item $index was toggled!');
                           });
-                        },
+                        }, buttonText: buttonTextData[index],
                       );
                     },
                   ),
@@ -168,6 +177,7 @@ class AreaView extends StatelessWidget {
     required this.index,
     required this.isToggled,
     this.onToggle,
+    required this.buttonText,
   }) : super(key: key);
 
   final String? imagepath;
@@ -176,7 +186,8 @@ class AreaView extends StatelessWidget {
   final int index;
   final bool isToggled;
   final VoidCallback? onToggle;
-  
+  final String buttonText;
+
   // get isToggled => null;
 
   @override
@@ -191,7 +202,7 @@ class AreaView extends StatelessWidget {
                 0.0, 50 * (1.0 - animation!.value), 0.0),
             child: Container(
               decoration: BoxDecoration(
-                color: isToggled ? MixyAppTheme.nearlyDarkBlue : MixyAppTheme.white,
+                color: isToggled ? Colors.deepOrange : MixyAppTheme.white,
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8.0),
                     bottomLeft: Radius.circular(8.0),
@@ -219,15 +230,22 @@ class AreaView extends StatelessWidget {
                     // prints the index of the tapped item (debugging purposes)
                     print('Item $index was tapped!');
                     },
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 16, left: 16, right: 16),
-                        child: Image.asset(imagepath!),
-                      ),
-                    ],
-                  ),
+                  child: Center(
+                    child: Text(buttonText,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: isToggled ? Colors.white : Colors.black,),
+                      textAlign: TextAlign.center,),)
+                  // child: Column(
+                  //   children: <Widget>[
+                  //     Padding(
+                  //       padding:
+                  //           const EdgeInsets.only(top: 16, left: 16, right: 16),
+                  //       child: Image.asset(imagepath!),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ),
             ),
