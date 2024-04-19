@@ -18,6 +18,8 @@ void main() async {
       appId: dotenv.env['APP_ID']!,
       messagingSenderId: dotenv.env['SENDER_ID']!,
       projectId: dotenv.env['PROJECT_ID']!,
+      storageBucket: "mixy2024-5dcf8.appspot.com",
+
   )
   );
   runApp(MyApp());

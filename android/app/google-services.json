@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:496142997358:android:5b9ea88f2b804cd4bc537f",
+        "mobilesdk_app_id": "1:496142997358:android:fdaa0cff520c127abc537f",
         "android_client_info": {
-          "package_name": "com.example.mixy_demo"
+          "package_name": "com.example.mixy"
         }
       },
       "oauth_client": [
