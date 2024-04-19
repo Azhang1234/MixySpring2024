@@ -61,6 +61,34 @@ class _IngredientScreenState extends State<IngredientScreen>
     });
     super.initState();
   }
+  
+  void showCenteredNotification(BuildContext context, String message) {
+  OverlayEntry overlayEntry = OverlayEntry(
+    builder: (context) => Positioned(
+      top: MediaQuery.of(context).size.height / 2 - 87, // centers vertically
+      left: MediaQuery.of(context).size.width / 4 + 20, // centers horizontally
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          color: Colors.orange,
+          child: Text(
+            message,
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+        ),
+      ),
+    ),
+  );
+
+    // Insert the overlay entry into the overlay
+    Overlay.of(context)?.insert(overlayEntry);
+
+    // Automatically remove the overlay after some duration
+    Future.delayed(Duration(seconds: 2), () {
+      overlayEntry.remove();
+    });
+  }
 
   void addAllListData() {
     const int count = 9;
@@ -76,9 +104,24 @@ class _IngredientScreenState extends State<IngredientScreen>
           setState(() {
             selectedIngredients.add(ingredient);
           });
+          // use function to show the notification
+          showCenteredNotification(context, 'Ingredient Added!');
         },
       ),
     );
+
+    listViews.add(
+      TitleView(
+        titleTxt: 'Available Ingredients',
+        subTxt: '',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval((1 / count) * 4, 1.0,
+                curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController!,
+      ),
+    );
+
     listViews.add(
       IngredientSelectView(
         mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -96,7 +139,7 @@ class _IngredientScreenState extends State<IngredientScreen>
     listViews.add(
       TitleView(
         titleTxt: 'Ingredients Cabinet',
-        subTxt: 'Instructions',
+        subTxt: '',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval((1 / count) * 4, 1.0,
