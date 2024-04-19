@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mixyspring2024/gpt_lijun/getRecomd.dart';
 import 'package:mixyspring2024/ui_view/add_button_view.dart';
@@ -5,6 +6,7 @@ import 'package:mixyspring2024/ui_view/running_view.dart';
 import 'package:mixyspring2024/ui_view/title_view.dart';
 import 'package:mixyspring2024/ui_view/workout_view.dart';
 import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 import '../mixy_app_theme.dart';
 
@@ -27,6 +29,8 @@ class NewScreen extends StatefulWidget {
 }
 
 class _NewScreenState extends State<NewScreen> {
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
+  String? get userId => user?.uid;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,10 +62,26 @@ class _NewScreenState extends State<NewScreen> {
             for (var equipment in widget.drink.equipments)
               Text('- $equipment'),
           ],
-        ),
+        ),  
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.favorite_border),  // Change this to a filled icon if the drink is a favorite
+        onPressed: () {
+          saveDrinkToFavorites(widget.drink);
+        }
+      ),      
     );
   }
+  void saveDrinkToFavorites(Drink drink) async {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final QuerySnapshot<Map<String, dynamic>> querySnapshot = await firestore.collection('Users').doc(userId).collection("Drinks").where('Name', isEqualTo: drink.name).get();
+  if (querySnapshot.docs.isNotEmpty) {
+    final DocumentSnapshot<Map<String, dynamic>> drinkSnapshot = querySnapshot.docs.first;
+    await drinkSnapshot.reference.update({
+      'Favorite': true,
+    });
+  }
+}
 }
 
 class _AddButtonScreenState extends State<AddButtonScreen>
