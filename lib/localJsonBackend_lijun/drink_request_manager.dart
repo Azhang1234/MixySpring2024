@@ -83,6 +83,7 @@ class Drink {
   final String instructions;
   final List<String> equipments;
   final List<String> ingredients;
+  String? drinkID;
 
   Drink({
     required this.name,
@@ -91,6 +92,7 @@ class Drink {
     required this.instructions,
     required this.equipments,
     required this.ingredients,
+    this.drinkID,
   });
   Map<String, dynamic> toJson() {
     return {
@@ -103,7 +105,7 @@ class Drink {
     };
   }
 
-  factory Drink.fromJson(Map<String, dynamic> json) {
+  factory Drink.fromJson(Map<String, dynamic> json, String docID) {
     return Drink(
       name: json['Name'],
       timeCreated: json['TimeCreated'],
@@ -111,11 +113,12 @@ class Drink {
       instructions: json['Instructions'],
       equipments: List<String>.from(json['Equipments']),
       ingredients: List<String>.from(json['Ingredients']),
+      drinkID: docID,
     );
   }
   @override
   String toString() {
-    return 'Drink(name: $name, timeCreated: $timeCreated, favorite: $favorite, instructions: $instructions, equipments: $equipments, ingredients: $ingredients)';
+    return 'Drink(name: $name, timeCreated: $timeCreated, favorite: $favorite, instructions: $instructions, equipments: $equipments, ingredients: $ingredients, id: $drinkID)';
   }
 }
 
@@ -185,7 +188,8 @@ class DataManager {
         .get();
     return querySnapshot.docs
         .map((doc) => Drink.fromJson(
-            Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>)))
+            Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>),
+            doc.id))
         .toList();
   }
 

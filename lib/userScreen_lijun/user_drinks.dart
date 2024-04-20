@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import '../add_button/drink_detail_page.dart';
 import '../localJsonBackend_lijun/drink_request_manager.dart';
 import '../mixy_app_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
-
 import '../mixy_app_theme.dart';
 
 class AreaListView extends StatefulWidget {
@@ -94,6 +94,7 @@ class _AreaListViewState extends State<AreaListView>
                             drinks[index].favorite, // Pass favorite status
                         animation: animation,
                         animationController: animationController!,
+                        drink: drinks[index], // Pass the drink object
                       );
                     },
                   ),
@@ -114,12 +115,14 @@ class AreaView extends StatelessWidget {
     required this.animation,
     required this.name,
     required this.favorite,
+    required this.drink,
   }) : super(key: key);
 
   final AnimationController? animationController;
   final Animation<double>? animation;
   final String name;
   final bool favorite;
+  final Drink drink;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +149,9 @@ class AreaView extends StatelessWidget {
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () {
-                    print('Area Tapped');
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => DrinkDetailScreen(drink: drink),
+                    ));
                   },
                   child: Stack(
                     children: <Widget>[

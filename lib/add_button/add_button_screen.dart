@@ -29,10 +29,17 @@ class NewScreen extends StatefulWidget {
 }
 
 class _NewScreenState extends State<NewScreen> {
-  auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;
   String? get userId => user?.uid;
+  late List<bool> stepChecklist = List<bool>.filled(
+      widget.drink.instructions.split(RegExp(r'\d+\.\s')).length - 1,
+      false); // To keep track of the completed steps
   @override
   Widget build(BuildContext context) {
+    List<String> steps = widget.drink.instructions
+        .split(RegExp(r'\d+\.\s'))
+        .where((step) => step.isNotEmpty)
+        .toList();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.drink.name),
@@ -42,46 +49,57 @@ class _NewScreenState extends State<NewScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'Ingredients:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            for (var ingredient in widget.drink.ingredients)
-              Text('- $ingredient'),
+            Text('Ingredients:', style: Theme.of(context).textTheme.headline6),
+            ...widget.drink.ingredients
+                .map((ingredient) => Text('- $ingredient'))
+                .toList(),
             SizedBox(height: 20),
-            Text(
-              'Instructions:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text(widget.drink.instructions),
+            Text('Instructions:', style: Theme.of(context).textTheme.headline6),
+            ...List<Widget>.generate(steps.length, (index) {
+              return CheckboxListTile(
+                title: Text(steps[index].trim()),
+                value: stepChecklist[index],
+                onChanged: (bool? value) {
+                  setState(() {
+                    stepChecklist[index] = value!;
+                  });
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+              );
+            }),
             SizedBox(height: 20),
-            Text(
-              'Equipment:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            for (var equipment in widget.drink.equipments)
-              Text('- $equipment'),
+            Text('Equipment:', style: Theme.of(context).textTheme.headline6),
+            ...widget.drink.equipments
+                .map((equipment) => Text('- $equipment'))
+                .toList(),
           ],
-        ),  
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.favorite_border),  // Change this to a filled icon if the drink is a favorite
-        onPressed: () {
-          saveDrinkToFavorites(widget.drink);
-        }
-      ),      
+          child: Icon(Icons
+              .favorite_border), // Change this to a filled icon if the drink is a favorite
+          onPressed: () {
+            saveDrinkToFavorites(widget.drink);
+          }),
     );
   }
+
   void saveDrinkToFavorites(Drink drink) async {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final QuerySnapshot<Map<String, dynamic>> querySnapshot = await firestore.collection('Users').doc(userId).collection("Drinks").where('Name', isEqualTo: drink.name).get();
-  if (querySnapshot.docs.isNotEmpty) {
-    final DocumentSnapshot<Map<String, dynamic>> drinkSnapshot = querySnapshot.docs.first;
-    await drinkSnapshot.reference.update({
-      'Favorite': true,
-    });
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot = await firestore
+        .collection('Users')
+        .doc(userId)
+        .collection("Drinks")
+        .where('Name', isEqualTo: drink.name)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      final DocumentSnapshot<Map<String, dynamic>> drinkSnapshot =
+          querySnapshot.docs.first;
+      await drinkSnapshot.reference.update({
+        'Favorite': true,
+      });
+    }
   }
-}
 }
 
 class _AddButtonScreenState extends State<AddButtonScreen>
@@ -134,12 +152,12 @@ class _AddButtonScreenState extends State<AddButtonScreen>
         // subTxt: 'Details',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
-            curve:
-                const Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn))),
+            curve: const Interval((1 / count) * 0, 1.0,
+                curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController!,
       ),
     );
-    
+
     // this is the grid array of options for the drink
     listViews.add(
       AddButtonView(
@@ -158,8 +176,8 @@ class _AddButtonScreenState extends State<AddButtonScreen>
         // subTxt: 'more',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
-            curve:
-                const Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn))),
+            curve: const Interval((1 / count) * 4, 1.0,
+                curve: Curves.fastOutSlowIn))),
         animationController: widget.animationController!,
       ),
     );
@@ -168,46 +186,47 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     // CallGPT() is called when the button is pressed
     // a NewScreen is pushed onto the Navigator stack, which shiould show the drink(s) reccomended
     listViews.add(
-    Container(
-      width: 220, // increased size to accommodate margin
-      height: 220,
-      margin: const EdgeInsets.all(20.0), // adds pixels of space around the Container
-      child: InkWell(
-        onTap: () async {
-          print("GPT Called");
-          
-          // show the loading dialog
-          showLoadingDialog(context);
+      Container(
+        width: 220, // increased size to accommodate margin
+        height: 220,
+        margin: const EdgeInsets.all(
+            20.0), // adds pixels of space around the Container
+        child: InkWell(
+          onTap: () async {
+            print("GPT Called");
 
-          // simulate some processing delay
-          // EDIT THE DELAY HERE
-          await Future.delayed(Duration(seconds: 2));
+            // show the loading dialog
+            showLoadingDialog(context);
 
-          // dimiss dialog
-          Navigator.of(context, rootNavigator: true).pop();
-          
-          // LETTING GPT DO ITS THING (BUT IT COSTS MONEY SO LEAVE IT COMMENTED OUT FOR NOW)
-          final drink = await CallGPT();
+            // simulate some processing delay
+            // EDIT THE DELAY HERE
+            await Future.delayed(Duration(seconds: 2));
 
-          Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NewScreen(drink: drink)),
-        );
-        },
-        child: Ink(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage('assets/mixy_app/Mix_it_Up.png'),
-              fit: BoxFit.cover,
+            // dimiss dialog
+            Navigator.of(context, rootNavigator: true).pop();
+
+            // LETTING GPT DO ITS THING (BUT IT COSTS MONEY SO LEAVE IT COMMENTED OUT FOR NOW)
+            final drink = await CallGPT();
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NewScreen(drink: drink)),
+            );
+          },
+          child: Ink(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage('assets/mixy_app/Mix_it_Up.png'),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: Center(
-            child: Text(
-              '',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            child: Center(
+              child: Text(
+                '',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -218,19 +237,20 @@ class _AddButtonScreenState extends State<AddButtonScreen>
   }
 
   void showLoadingDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false, // prevents the dialog from closing on tap outside
-    builder: (BuildContext context) {
-      return Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(), // loading spinner...
-              SizedBox(width: 20),
-              Text("Mixing... Please wait!"), // loading text...
+    showDialog(
+      context: context,
+      barrierDismissible:
+          false, // prevents the dialog from closing on tap outside
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(), // loading spinner...
+                SizedBox(width: 20),
+                Text("Mixing... Please wait!"), // loading text...
               ],
             ),
           ),
@@ -242,9 +262,12 @@ class _AddButtonScreenState extends State<AddButtonScreen>
   Drink processRawStringToDrink(String rawString) {
     // Define regex patterns to extract information
     final namePattern = RegExp(r"is a (.+?)\. Here's how to make it:");
-    final ingredientsPattern = RegExp(r'Ingredients:\s+- (.+?)\n\nInstructions:', dotAll: true);
-    final instructionsPattern = RegExp(r'Instructions:\s+(.+?)\n\n', dotAll: true);
-    final equipmentPattern = RegExp(r'Equipment:\s+- (.+?)(\n\n|$)', dotAll: true);
+    final ingredientsPattern =
+        RegExp(r'Ingredients:\s+- (.+?)\n\nInstructions:', dotAll: true);
+    final instructionsPattern =
+        RegExp(r'Instructions:\s+(.+?)\n\n', dotAll: true);
+    final equipmentPattern =
+        RegExp(r'Equipment:\s+- (.+?)(\n\n|$)', dotAll: true);
 
     // extracting information using regex
     final nameMatches = namePattern.firstMatch(rawString);
@@ -254,9 +277,13 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
     // processing extracted information
     final name = nameMatches?.group(1) ?? "Unknown Drink";
+    //the id for the drink
+    // final id = nameMatches?.group(1) ?? "Unknown Drink";
     final ingredientsList = ingredientsMatches?.group(1)?.split('\n- ') ?? [];
-    final instructions = instructionsMatches?.group(1)?.replaceAll('\n', ' ') ?? "No instructions provided.";
-    final equipmentsList = equipmentMatches?.group(1)?.split('\n- ') ?? ["Standard bar tools"];
+    final instructions = instructionsMatches?.group(1)?.replaceAll('\n', ' ') ??
+        "No instructions provided.";
+    final equipmentsList =
+        equipmentMatches?.group(1)?.split('\n- ') ?? ["Standard bar tools"];
 
     // creating a Drink object
     Drink newDrink = Drink(
@@ -286,7 +313,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
       optionalPreferences: currentDrinkRequest.optionalPreferences,
       alcoholStrength: currentDrinkRequest.alcoholStrength,
     );
-    print(cocktailRecommendation);
+    print("the cocktailRecommendation is $cocktailRecommendation");
     //store into local json file
     //process the raw string
     Drink drink = processRawStringToDrink(cocktailRecommendation);
@@ -299,6 +326,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     });
     return drink;
   }
+
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
