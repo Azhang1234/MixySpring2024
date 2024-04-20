@@ -2,13 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 import 'package:mixyspring2024/mixy_app_theme.dart';
-import '../gpt_lijun/getRecomd.dart';
-import '../ui_view/Ingredient_ui_lijun/area_list_view.dart';
+import 'user_drinks.dart';
 import '../ui_view/Ingredient_ui_lijun/title_view.dart';
 import '../ui_view/user_profile_view_lijun/profile_header_view.dart';
 import '../ui_view/user_profile_view_lijun/summary_view.dart';
-import '../ui_view/user_profile_view_lijun/activity_feed_view.dart';
-import '../ui_view/user_profile_view_lijun/followers_following_view.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key, this.animationController})
@@ -24,14 +21,15 @@ class _UserProfileScreenState extends State<UserProfileScreen>
     with TickerProviderStateMixin {
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
-  final dataManager = DataManager();
+  // final dataManager = DataManager();
 
   double topBarOpacity = 0.0;
 
   @override
   void initState() {
     super.initState();
-    refreshData();
+    // refreshData();
+    addAllListData();
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
@@ -56,25 +54,9 @@ class _UserProfileScreenState extends State<UserProfileScreen>
     });
   }
 
-  void refreshData() async {
-    var user =
-        await dataManager.getUser(); // Assumes getUser returns a User object
-    var drinks = await dataManager
-        .getDrinks(); // Assumes getDrinks returns a List<Drink>
-    var currentDrinkRequest = await dataManager
-        .getCurrentDrinkRequest(); // Assumes getCurrentDrinkRequest returns a CurrentDrinkRequest object
-    // dataManager.addDrink(drinkData);
-    setState(() {
-      // Rebuild your UI based on the data you've loaded
-      listViews.clear(); // Clear existing views
-      addAllListData(user, drinks, currentDrinkRequest);
-    });
-  }
-
-  void addAllListData(
-      User user, List<Drink> drinks, CurrentDrinkRequest currentDrinkRequest) {
+  void addAllListData() {
     const int count =
-        4; // Adjust based on your actual widgets count for the user profile
+        9; // Adjust based on your actual widgets count for the user profile
 
     // Example to add ProfileHeaderView with animation and dynamic image URL
     listViews.add(
@@ -87,7 +69,6 @@ class _UserProfileScreenState extends State<UserProfileScreen>
           ),
         ),
         animationController: widget.animationController,
-        imageUrl: user.imageUrl, // Add your dynamic image URL here
       ),
     );
 // Example to add SummaryView with animation and dynamic text
@@ -109,7 +90,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Favorites',
+        titleTxt: 'Your Drinks',
         subTxt: 'Instructions',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
@@ -118,7 +99,18 @@ class _UserProfileScreenState extends State<UserProfileScreen>
         animationController: widget.animationController!,
       ),
     );
-
+    listViews.add(
+      AreaListView(
+        mainScreenAnimationController: widget.animationController,
+        mainScreenAnimation: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval((1 / count) * 5, 1.0,
+                curve: Curves.fastOutSlowIn),
+          ),
+        ),
+      ),
+    );
   }
 
   Future<bool> getData() async {

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import '../localJsonBackend_lijun/drink_request_manager.dart';
+import '../mixy_app_theme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flutter/material.dart';
 
 import '../mixy_app_theme.dart';
 
@@ -22,12 +27,21 @@ class _AreaListViewState extends State<AreaListView>
     'assets/mixy_app/mixyLogo.png',
     'assets/mixy_app/mixyLogo.png',
   ];
-
+  List<Drink> drinks = []; // This will hold your drinks
+  final dataManager = DataManager();
   @override
   void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
     super.initState();
+    fetchDrinks();
+  }
+
+  Future<void> fetchDrinks() async {
+    drinks = await dataManager
+        .getDrinks(); // Assume getDrinks() is accessible or imported
+    print(drinks);
+    setState(() {}); // Update the state to reflect new drinks
   }
 
   @override
@@ -62,9 +76,9 @@ class _AreaListViewState extends State<AreaListView>
                     childAspectRatio: 1.0,
                   ),
                   children: List<Widget>.generate(
-                    areaListData.length,
+                    drinks.length, // Use the length of drinks
                     (int index) {
-                      final int count = areaListData.length;
+                      final int count = drinks.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
@@ -75,7 +89,9 @@ class _AreaListViewState extends State<AreaListView>
                       );
                       animationController?.forward();
                       return AreaView(
-                        imagepath: areaListData[index],
+                        name: drinks[index].name, // Pass the drink name
+                        favorite:
+                            drinks[index].favorite, // Pass favorite status
                         animation: animation,
                         animationController: animationController!,
                       );
@@ -94,14 +110,16 @@ class _AreaListViewState extends State<AreaListView>
 class AreaView extends StatelessWidget {
   const AreaView({
     Key? key,
-    this.imagepath,
-    this.animationController,
-    this.animation,
+    required this.animationController,
+    required this.animation,
+    required this.name,
+    required this.favorite,
   }) : super(key: key);
 
-  final String? imagepath;
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final String name;
+  final bool favorite;
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +134,7 @@ class AreaView extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: MixyAppTheme.white,
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    bottomLeft: Radius.circular(8.0),
-                    bottomRight: Radius.circular(8.0),
-                    topRight: Radius.circular(8.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
                       color: MixyAppTheme.grey.withOpacity(0.4),
@@ -131,20 +145,42 @@ class AreaView extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  focusColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  splashColor: MixyAppTheme.nearlyDarkBlue.withOpacity(0.2),
                   onTap: () {
-                    print('Test2');
+                    print('Area Tapped');
                   },
-                  child: Column(
+                  child: Stack(
                     children: <Widget>[
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 16, left: 16, right: 16),
-                        child: Image.asset(imagepath!),
+                      // Assuming you use an image or placeholder here
+                      Positioned.fill(
+                        child: Image.asset('assets/mixy_app/mixyLogo.png',
+                            fit: BoxFit.cover),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 10,
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: Offset(1.0, 1.0),
+                                blurRadius: 3.0,
+                                color: Color.fromARGB(150, 0, 0, 0),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: Icon(
+                          favorite ? Icons.favorite : Icons.favorite_border,
+                          color: Colors.red,
+                        ),
                       ),
                     ],
                   ),
