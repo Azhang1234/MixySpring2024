@@ -21,7 +21,8 @@ class CurrentDrinkRequest {
   factory CurrentDrinkRequest.fromJson(Map<String, dynamic> json) {
     return CurrentDrinkRequest(
       ingredients: List<String>.from(json['Ingredients']),
-      optionalPreferences: json['OptionalPreferences'], // Corrected field access
+      optionalPreferences:
+          json['OptionalPreferences'], // Corrected field access
       alcoholStrength: json['AlcoholStrength'],
     );
   }
@@ -78,10 +79,11 @@ class User {
 class Drink {
   final String name;
   final String timeCreated;
-  final bool favorite;
+  bool favorite;
   final String instructions;
   final List<String> equipments;
   final List<String> ingredients;
+  String? drinkID;
 
   Drink({
     required this.name,
@@ -90,6 +92,7 @@ class Drink {
     required this.instructions,
     required this.equipments,
     required this.ingredients,
+    this.drinkID,
   });
   Map<String, dynamic> toJson() {
     return {
@@ -102,7 +105,7 @@ class Drink {
     };
   }
 
-  factory Drink.fromJson(Map<String, dynamic> json) {
+  factory Drink.fromJson(Map<String, dynamic> json, String docID) {
     return Drink(
       name: json['Name'],
       timeCreated: json['TimeCreated'],
@@ -110,33 +113,47 @@ class Drink {
       instructions: json['Instructions'],
       equipments: List<String>.from(json['Equipments']),
       ingredients: List<String>.from(json['Ingredients']),
+      drinkID: docID,
     );
   }
   @override
   String toString() {
-    return 'Drink(name: $name, timeCreated: $timeCreated, favorite: $favorite, instructions: $instructions, equipments: $equipments, ingredients: $ingredients)';
+    return 'Drink(name: $name, timeCreated: $timeCreated, favorite: $favorite, instructions: $instructions, equipments: $equipments, ingredients: $ingredients, id: $drinkID)';
   }
 }
 
 class DataManager {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
+  auth.User? get user => auth.FirebaseAuth.instance.currentUser;
   String? get userId => user?.uid;
 
   Future<DocumentSnapshot> _readFirestore(String subCollectionName) async {
-    return await firestore.collection('Users').doc(userId).collection(subCollectionName).get().then((value) => value.docs.first);
+    return await firestore
+        .collection('Users')
+        .doc(userId)
+        .collection(subCollectionName)
+        .get()
+        .then((value) => value.docs.first);
   }
 
-  Future<void> _writeFirestore(String subCollectionName, Map<String, dynamic> json) async {
-    return await firestore.collection('Users').doc(userId).collection(subCollectionName).doc(userId).set(json)
-      .then((value) => print('Document Added'))
-      .catchError((error) => print('Failed to add document: $error'));
+  Future<void> _writeFirestore(
+      String subCollectionName, Map<String, dynamic> json) async {
+    return await firestore
+        .collection('Users')
+        .doc(userId)
+        .collection(subCollectionName)
+        .doc(userId)
+        .set(json)
+        .then((value) => print('Document Added'))
+        .catchError((error) => print('Failed to add document: $error'));
   }
 
   // Retrieve user data
   Future<User> getUser() async {
-    final DocumentSnapshot doc = await firestore.collection('Users').doc(userId).get();
-    return User.fromJson(Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>));
+    final DocumentSnapshot doc =
+        await firestore.collection('Users').doc(userId).get();
+    return User.fromJson(
+        Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>));
   }
 
   // Update user data
@@ -148,33 +165,59 @@ class DataManager {
   Future<CurrentDrinkRequest> getCurrentDrinkRequest() async {
     final DocumentSnapshot doc = await _readFirestore('CurrentDrinkRequests');
     if (doc.data() != null) {
-      return CurrentDrinkRequest.fromJson(Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>));
+      return CurrentDrinkRequest.fromJson(
+          Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>));
     } else {
       throw Exception('CurrentDrinkRequest document does not exist or is null');
-    }  
+    }
   }
 
   // Update CurrentDrinkRequest data
-  Future<void> updateCurrentDrinkRequest(CurrentDrinkRequest drinkRequest) async {
+  Future<void> updateCurrentDrinkRequest(
+      CurrentDrinkRequest drinkRequest) async {
     await _writeFirestore('CurrentDrinkRequests', drinkRequest.toJson());
   }
 
   // Retrieve all drinks
   Future<List<Drink>> getDrinks() async {
-    final QuerySnapshot querySnapshot = await firestore.collection('Users').doc(userId).collection('Drinks').get();
-    return querySnapshot.docs.map((doc) => Drink.fromJson(Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>))).toList();
+    final QuerySnapshot querySnapshot = await firestore
+        .collection('Users')
+        .doc(userId)
+        .collection('Drinks')
+        .orderBy('TimeCreated')
+        .get();
+    return querySnapshot.docs
+        .map((doc) => Drink.fromJson(
+            Map<String, dynamic>.from(doc.data() as Map<dynamic, dynamic>),
+            doc.id))
+        .toList();
   }
 
   // Append a new drink
   Future<void> addDrink(Drink drink) async {
-    await firestore.collection('Users').doc(userId).collection('Drinks').add(drink.toJson());
+    await firestore
+        .collection('Users')
+        .doc(userId)
+        .collection('Drinks')
+        .add(drink.toJson());
   }
 
   // Update a specific drink
-  Future<void> updateDrink(String drinkId, Map<String, dynamic> drinkData) async {
-    final DocumentSnapshot doc = await firestore.collection('Users').doc(userId).collection('Drinks').doc(drinkId).get();
+  Future<void> updateDrink(
+      String drinkId, Map<String, dynamic> drinkData) async {
+    final DocumentSnapshot doc = await firestore
+        .collection('Users')
+        .doc(userId)
+        .collection('Drinks')
+        .doc(drinkId)
+        .get();
     if (doc.exists) {
-      await firestore.collection('Users').doc(userId).collection('Drinks').doc(drinkId).update(drinkData);
+      await firestore
+          .collection('Users')
+          .doc(userId)
+          .collection('Drinks')
+          .doc(drinkId)
+          .update(drinkData);
     }
   }
 }
