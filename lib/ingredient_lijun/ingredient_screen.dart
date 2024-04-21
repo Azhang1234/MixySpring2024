@@ -156,7 +156,6 @@ class _IngredientScreenState extends State<IngredientScreen>
                 curve: const Interval((1 / count) * 5, 1.0,
                     curve: Curves.fastOutSlowIn))),
         mainScreenAnimationController: widget.animationController!,
-
       ),
     );
   }
@@ -178,6 +177,7 @@ class _IngredientScreenState extends State<IngredientScreen>
       ),
     );
   }
+
   Widget getMainListViewUI() {
     return ListView.builder(
       controller: scrollController,
@@ -191,6 +191,6 @@ class _IngredientScreenState extends State<IngredientScreen>
         widget.animationController?.forward();
         return listViews[index];
       },
-    );  
+    );
   }
 }
