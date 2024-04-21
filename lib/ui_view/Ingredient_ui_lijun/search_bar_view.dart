@@ -44,15 +44,21 @@ class _SearchBarViewState extends State<SearchBarView> {
     super.dispose();
   }
 
-  Future<void> _addIngredientToAvailableIngredients() async {
-    final String value = _controller.text;
+Future<void> _addIngredientToAvailableIngredients() async {
+  final String value = _controller.text;
 
-    final ingredient = Ingredient(name: value);
+  final ingredient = Ingredient(name: value);
 
+  // Retrieve the current AvailableIngredients documents
+  QuerySnapshot querySnapshot = await _firestore.collection('Users').doc(userId).collection('AvailableIngredients').where('name', isEqualTo: value).get();
+
+  if (querySnapshot.docs.isEmpty) {
+    // If no AvailableIngredients document with the same name exists, add it to Firestore
     widget.onIngredientAdded(ingredient);
     await _firestore.collection('Users').doc(userId).collection('AvailableIngredients').add(ingredient.toJson());
     _controller.clear();
   }
+}
 
   @override
   Widget build(BuildContext context) {

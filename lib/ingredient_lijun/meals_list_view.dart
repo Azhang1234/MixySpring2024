@@ -68,45 +68,51 @@ class _IngredientSelectViewState extends State<IngredientSelectView>
           return Text('Error: ${snapshot.error}');
         } else {
           ingredients = snapshot.data!;
-          return AnimatedBuilder(
-            animation: widget.mainScreenAnimationController!,
-            builder: (BuildContext context, Widget? child) {
-              return FadeTransition(
-                opacity: widget.mainScreenAnimation!,
-                child: Transform(
-                  transform: Matrix4.translationValues(
-                      0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
-                  child: SizedBox(
-                    height: 216,
-                    width: double.infinity,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.only(
-                          top: 0, bottom: 0, right: 16, left: 16),
-                      itemCount: ingredients.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        final int count =
-                            ingredients.length > 10 ? 10 : ingredients.length;
-                        final Animation<double> animation =
-                            Tween<double>(begin: 0.0, end: 1.0).animate(
-                                CurvedAnimation(
-                                    parent: animationController!,
-                                    curve: Interval((1 / count) * index, 1.0,
-                                        curve: Curves.fastOutSlowIn)));
-                        animationController?.forward();
+          if (ingredients.isEmpty) {
+            return Center(
+              child: Text('No Available Ingredients Selected'),
+            );
+        } else {
+            return AnimatedBuilder(
+              animation: widget.mainScreenAnimationController!,
+              builder: (BuildContext context, Widget? child) {
+                return FadeTransition(
+                  opacity: widget.mainScreenAnimation!,
+                  child: Transform(
+                    transform: Matrix4.translationValues(
+                        0.0, 30 * (1.0 - widget.mainScreenAnimation!.value), 0.0),
+                    child: SizedBox(
+                      height: 216,
+                      width: double.infinity,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.only(
+                            top: 0, bottom: 0, right: 16, left: 16),
+                        itemCount: ingredients.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, int index) {
+                          final int count =
+                              ingredients.length > 10 ? 10 : ingredients.length;
+                          final Animation<double> animation =
+                              Tween<double>(begin: 0.0, end: 1.0).animate(
+                                  CurvedAnimation(
+                                      parent: animationController!,
+                                      curve: Interval((1 / count) * index, 1.0,
+                                          curve: Curves.fastOutSlowIn)));
+                          animationController?.forward();
 
-                        return IngredientView(
-                          ingredient: ingredients[index],
-                          animation: animation,
-                          animationController: animationController!,
-                        );
-                      },
+                          return IngredientView(
+                            ingredient: ingredients[index],
+                            animation: animation,
+                            animationController: animationController!,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          );
+                );
+              },
+            );
+          }
         }
       },
     );
@@ -128,11 +134,9 @@ class IngredientView extends StatelessWidget {
   auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
   String? get userId => user?.uid;
 
-  Future<void> _addIngredientToCurrentRequest(String value) async {
-
+Future<void> _addIngredientToCurrentRequest(String value) async {
     final ingredient = Ingredient(name: value);
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
 
     // Retrieve the current CurrentDrinkRequest document
     QuerySnapshot querySnapshot = await firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').get();
@@ -147,13 +151,15 @@ class IngredientView extends StatelessWidget {
       currentDrinkRequest = CurrentDrinkRequest(ingredients: [], optionalPreferences: "", alcoholStrength:"");
     }
 
-    // Add the new ingredient to the CurrentDrinkRequest object
-    currentDrinkRequest.ingredients.add(ingredient.name);
+    // Check if the ingredient already exists in the CurrentDrinkRequest object
+    if (!currentDrinkRequest.ingredients.contains(ingredient.name)) {
+      // If the ingredient does not exist, add it to the CurrentDrinkRequest object
+      currentDrinkRequest.ingredients.add(ingredient.name);
 
-    // Write the CurrentDrinkRequest object to Firestore
-    await firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set(currentDrinkRequest.toJson());
-
-  }
+      // Write the CurrentDrinkRequest object to Firestore
+      await firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set(currentDrinkRequest.toJson());
+    }
+}
 
   Future<void> _removeIngredientFromAvaialbleIngredients(String value) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
