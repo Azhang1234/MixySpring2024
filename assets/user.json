@@ -1,0 +1,32 @@
+{
+  "User": {
+    "Name": "John Doe",
+    "Id": "12345",
+    "Bio": "A cocktail enthusiast with a penchant for creating unique mixes.",
+    "ImageUrl": "assets/mixy_app/mixyLogo.png"
+  },
+  "Drinks": [
+    {
+      "Name": "Margarita",
+      "TimeCreated": "2018-06-01T12:00:00Z",
+      "Favorite": true,
+      "Instructions": "1. Salt the rim of the glass. 2. Mix the ingredients with ice. 3. Shake well and strain into the glass.",
+      "Equipments": ["Cocktail shaker", "Strainer", "Glass"],
+      "Ingredients": ["2 oz Tequila", "1 oz Lime juice", "1 oz Triple sec", "Salt"]
+    },
+    {
+      "Name": "Old Fashioned",
+      "TimeCreated": "2018-06-02T12:00:10Z",
+      "Favorite": false,
+      "Instructions": "1. Muddle sugar and bitters with one water at the bottom of a glass. 2. Fill the glass with ice cubes and add whiskey. 3. Garnish with an orange slice and a cocktail cherry.",
+      "Equipments": ["Glass", "Muddler", "Spoon"],
+      "Ingredients": ["2 oz Bourbon", "1 Sugar cube", "Few dashes Angostura bitters", "Water", "Ice cubes", "Orange slice", "Cocktail cherry"]
+    }
+  ],
+  "CurrentDrinkRequest": {
+    "Ingredients": ["cheese", "lime", "ginger beer"],
+    "TypesOfAlcohol": "Sweet",
+    "Occasion": "Summer evening",
+    "Complexity": "Easy"
+  }
+}

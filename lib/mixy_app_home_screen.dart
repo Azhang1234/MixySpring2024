@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'mixy_app_theme.dart';
 import 'models/tabIcon_data.dart';
-import 'ingredient/ingredient_screen.dart';
+import 'ingredient_lijun/ingredient_screen.dart';
 import 'mixing/mixing_screen.dart';
 import 'community/community_screen.dart';
-import 'user_profile/user_profile_screen.dart';
+import 'userScreen_lijun/user_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'add_button/add_button_screen.dart';
 
@@ -19,7 +19,7 @@ class MixyAppHomeScreen extends StatefulWidget {
 class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  final FirebaseAuth _auth = FirebaseAuth.instance; 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
@@ -32,7 +32,7 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     for (var tab in tabIconsList) {
       tab.isSelected = false;
     }
-    
+
     tabIconsList[0].isSelected = true;
 
     animationController = AnimationController(
@@ -40,6 +40,7 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
     tabBody = IngredientScreen(animationController: animationController);
     super.initState();
   }
+
   @override
   void dispose() {
     animationController?.dispose();
@@ -102,8 +103,8 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      IngredientScreen(animationController: animationController);
+                  tabBody = IngredientScreen(
+                      animationController: animationController);
                 });
               });
             } else if (index == 1) {
@@ -132,8 +133,8 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
                   return;
                 }
                 setState(() {
-                  tabBody =
-                      UserProfileScreen(animationController: animationController);
+                  tabBody = UserProfileScreen(
+                      animationController: animationController);
                 });
               });
             }
