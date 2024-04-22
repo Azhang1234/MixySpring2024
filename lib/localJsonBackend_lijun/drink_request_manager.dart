@@ -220,4 +220,61 @@ class DataManager {
           .update(drinkData);
     }
   }
+
+  Future<String> getInfo() async {
+    // Attempt to get the first document in the 'info' sub-collection
+    QuerySnapshot querySnapshot = await firestore
+        .collection('Users')
+        .doc(userId)
+        .collection('info')
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // If a document exists, return its 'info' field
+      return querySnapshot.docs.first.get('info') ?? 'Please enter something';
+    } else {
+      // If no document exists, create one with a default message
+      DocumentReference docRef = await firestore
+          .collection('Users')
+          .doc(userId)
+          .collection('info')
+          .add({'info': 'Please enter something'});
+
+      // Return the default message
+      return 'Please enter something';
+    }
+  }
+
+  Future<void> updateInfo(String newInfo) async {
+    try {
+      // Query the first document in the 'info' sub-collection
+      QuerySnapshot querySnapshot = await firestore
+          .collection('Users')
+          .doc(userId)
+          .collection('info')
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // Get the first document's ID
+        String docId = querySnapshot.docs.first.id;
+
+        // Update the 'info' field of the first document
+        await firestore
+            .collection('Users')
+            .doc(userId)
+            .collection('info')
+            .doc(docId)
+            .update({'info': newInfo});
+        print('Info updated successfully.');
+      } else {
+        print('No documents found in the info sub-collection.');
+      }
+    } catch (e) {
+      print('Error updating info: $e');
+      // You might want to throw the error to be handled by the calling function
+      throw e;
+    }
+  }
 }
