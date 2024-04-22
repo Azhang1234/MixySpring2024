@@ -56,7 +56,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
 
   void addAllListData() {
     const int count =
-        9; // Adjust based on your actual widgets count for the user profile
+        12; // Adjust based on your actual widgets count for the user profile
 
     // Example to add ProfileHeaderView with animation and dynamic image URL
     listViews.add(
@@ -71,6 +71,17 @@ class _UserProfileScreenState extends State<UserProfileScreen>
         animationController: widget.animationController,
       ),
     );
+    listViews.add(
+      TitleView(
+        titleTxt: 'Summary',
+        subTxt: 'Instructions',
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval((1 / count) * 4, 1.0,
+                curve: Curves.fastOutSlowIn))),
+        animationController: widget.animationController!,
+      ),
+    );
 // Example to add SummaryView with animation and dynamic text
     listViews.add(
       SummaryView(
@@ -82,8 +93,6 @@ class _UserProfileScreenState extends State<UserProfileScreen>
           ),
         ),
         animationController: widget.animationController,
-        summaryText:
-            'Your dynamic bio text passed from here.', // Add your dynamic summary text here
       ),
     );
 // Add other views (ActivityFeedView, FollowersFollowingView) similarly...
