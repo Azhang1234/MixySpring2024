@@ -56,9 +56,18 @@ class _AreaListViewState extends State<AreaListView>
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }
+        if (snapshot.data == null || snapshot.data!.data() == null) {
+          return Center(
+            child: Text('No Ingredients Selected'),
+          );
+        }
 
         final ingredients = snapshot.data!.data()!['Ingredients'] as List<dynamic>;
-
+        if (ingredients.isEmpty) {
+          return Center(
+            child: Text('No Ingredients Selected'),
+          );
+        }
         return AnimatedBuilder(
           animation: widget.mainScreenAnimationController!,
           builder: (BuildContext context, Widget? child) {
