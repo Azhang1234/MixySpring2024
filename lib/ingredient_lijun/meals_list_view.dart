@@ -68,6 +68,11 @@ class _IngredientSelectViewState extends State<IngredientSelectView>
           return Text('Error: ${snapshot.error}');
         } else {
           ingredients = snapshot.data!;
+          if (ingredients.isEmpty) {
+            return Center(
+              child: Text('No Available Ingredients Selected'),
+            );
+          }
           return AnimatedBuilder(
             animation: widget.mainScreenAnimationController!,
             builder: (BuildContext context, Widget? child) {
@@ -128,32 +133,32 @@ class IngredientView extends StatelessWidget {
   auth.User? get user => auth.FirebaseAuth.instance.currentUser;  
   String? get userId => user?.uid;
 
-  Future<void> _addIngredientToCurrentRequest(String value) async {
+Future<void> _addIngredientToCurrentRequest(String value) async {
+  final ingredient = Ingredient(name: value);
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    final ingredient = Ingredient(name: value);
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // Retrieve the current CurrentDrinkRequest document
+  QuerySnapshot querySnapshot = await firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').get();
 
+  CurrentDrinkRequest currentDrinkRequest;
 
-    // Retrieve the current CurrentDrinkRequest document
-    QuerySnapshot querySnapshot = await firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').get();
+  if (querySnapshot.docs.isNotEmpty) {
+    // If a CurrentDrinkRequest document exists, create a CurrentDrinkRequest object from the document
+    currentDrinkRequest = CurrentDrinkRequest.fromJson(querySnapshot.docs.first.data() as Map<String, dynamic>);
+  } else {
+    // If no CurrentDrinkRequest document exists, create a new CurrentDrinkRequest object
+    currentDrinkRequest = CurrentDrinkRequest(ingredients: [], optionalPreferences: "", alcoholStrength:"");
+  }
 
-    CurrentDrinkRequest currentDrinkRequest;
-
-    if (querySnapshot.docs.isNotEmpty) {
-      // If a CurrentDrinkRequest document exists, create a CurrentDrinkRequest object from the document
-      currentDrinkRequest = CurrentDrinkRequest.fromJson(querySnapshot.docs.first.data() as Map<String, dynamic>);
-    } else {
-      // If no CurrentDrinkRequest document exists, create a new CurrentDrinkRequest object
-      currentDrinkRequest = CurrentDrinkRequest(ingredients: [], optionalPreferences: "", alcoholStrength:"");
-    }
-
-    // Add the new ingredient to the CurrentDrinkRequest object
+  // Check if the ingredient already exists in the CurrentDrinkRequest object
+  if (!currentDrinkRequest.ingredients.contains(ingredient.name)) {
+    // If the ingredient does not exist, add it to the CurrentDrinkRequest object
     currentDrinkRequest.ingredients.add(ingredient.name);
 
     // Write the CurrentDrinkRequest object to Firestore
     await firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set(currentDrinkRequest.toJson());
-
   }
+}
 
   Future<void> _removeIngredientFromAvaialbleIngredients(String value) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
