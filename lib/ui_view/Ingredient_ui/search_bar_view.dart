@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 import 'package:mixyspring2024/mixy_app_theme.dart';
 import 'package:mixyspring2024/models/ingredients.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
@@ -12,12 +11,12 @@ class SearchBarView extends StatefulWidget {
   final ValueChanged<Ingredient> onIngredientAdded; // Add this line
 
 
-  SearchBarView({
-    Key? key,
+  const SearchBarView({
+    super.key,
     this.animationController,
     this.animation,
     required this.onIngredientAdded, // Add this line
-  }) : super(key: key);
+  });
 
   @override
   _SearchBarViewState createState() => _SearchBarViewState();
@@ -29,7 +28,7 @@ class _SearchBarViewState extends State<SearchBarView> {
 
   GlobalKey<AutoCompleteTextFieldState<Ingredient>> key = GlobalKey();
   
-  List<Ingredient> _results = [];
+  final List<Ingredient> _results = [];
   auth.User? get user => auth.FirebaseAuth.instance.currentUser;
   String? get userId => user?.uid;
   @override
@@ -90,19 +89,19 @@ Future<void> _addIngredientToAvailableIngredients() async {
                             },
                             itemBuilder: (context, item) {
                               return Container(
-                                padding: EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.all(20.0),
                                 child: Row(
                                   children: <Widget>[
                                     Text(
                                       item.name,
-                                      style: TextStyle(color: Colors.black),
+                                      style: const TextStyle(color: Colors.black),
                                     )
                                   ],
                                 ),
                               );
                             },
                             controller: _controller,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: MixyAppTheme.fontName,
                               fontWeight: FontWeight.normal,
                               fontSize: 16,
@@ -117,7 +116,7 @@ Future<void> _addIngredientToAvailableIngredients() async {
                                     25.0), // Increase this value for more rounded corners
                                 borderSide: BorderSide.none,
                               ),
-                              prefixIcon: Icon(
+                              prefixIcon: const Icon(
                                 Icons.search,
                                 color: MixyAppTheme.darkText,
                               ),
@@ -127,7 +126,7 @@ Future<void> _addIngredientToAvailableIngredients() async {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.add),
+                          icon: const Icon(Icons.add),
                           onPressed: _addIngredientToAvailableIngredients,
                         ),
                       ],

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 import 'package:mixyspring2024/mixy_app_theme.dart';
 import 'user_drinks.dart';
-import '../ui_view/Ingredient_ui_lijun/title_view.dart';
-import '../ui_view/user_profile_view_lijun/profile_header_view.dart';
-import '../ui_view/user_profile_view_lijun/summary_view.dart';
+import '../ui_view/Ingredient_ui/title_view.dart';
+import '../ui_view/user_profile_view/profile_header_view.dart';
+import '../ui_view/user_profile_view/summary_view.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key, this.animationController})

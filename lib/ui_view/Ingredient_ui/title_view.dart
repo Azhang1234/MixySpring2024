@@ -8,12 +8,11 @@ class TitleView extends StatelessWidget {
   final Animation<double>? animation;
 
   const TitleView(
-      {Key? key,
+      {super.key,
       this.titleTxt = "",
       this.subTxt = "",
       this.animationController,
-      this.animation})
-      : super(key: key);
+      this.animation});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,7 @@ class TitleView extends StatelessWidget {
                       child: Text(
                         titleTxt,
                         textAlign: TextAlign.left,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 24, // Adjust font size to match your design
                           fontWeight: FontWeight.bold,
                           color: MixyAppTheme

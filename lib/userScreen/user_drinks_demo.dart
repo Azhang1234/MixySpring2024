@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import '../localJsonBackend_lijun/drink_request_manager.dart';
-import '../mixy_app_theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:flutter/material.dart';
 
-import '../mixy_app_theme.dart';
 
 class DrinksListView extends StatefulWidget {
+  const DrinksListView({super.key});
+
   @override
   _DrinksListViewState createState() => _DrinksListViewState();
 }
@@ -39,16 +36,16 @@ class _DrinksListViewState extends State<DrinksListView> {
 
 class DrinkView extends StatelessWidget {
   const DrinkView({
-    Key? key,
+    super.key,
     required this.drink,
-  }) : super(key: key);
+  });
 
   final Drink drink;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -56,7 +53,7 @@ class DrinkView extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -64,7 +61,7 @@ class DrinkView extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.bottomLeft,
-            child: Text(drink.name, style: TextStyle(fontSize: 16)),
+            child: Text(drink.name, style: const TextStyle(fontSize: 16)),
           ),
           Align(
             alignment: Alignment.topRight,

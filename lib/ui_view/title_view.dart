@@ -8,12 +8,11 @@ class TitleView extends StatelessWidget {
   final Animation<double>? animation;
 
   const TitleView(
-      {Key? key,
+      {super.key,
       this.titleTxt = "",
       this.subTxt = "",
       this.animationController,
-      this.animation})
-      : super(key: key);
+      this.animation});
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +62,15 @@ class TitleView extends StatelessWidget {
                                 color: MixyAppTheme.nearlyDarkBlue,
                               ),
                             ),
-                            const SizedBox(
-                              height: 38,
-                              width: 26,
-                              child: Icon(
-                                Icons.arrow_forward,
-                                color: MixyAppTheme.darkText,
-                                size: 18,
-                              ),
-                            ),
+                            // const SizedBox(
+                            //   height: 38,
+                            //   width: 26,
+                            //   child: Icon(
+                            //     Icons.arrow_forward,
+                            //     color: MixyAppTheme.darkText,
+                            //     size: 18,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

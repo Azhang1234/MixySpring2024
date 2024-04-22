@@ -6,8 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class AreaListView extends StatefulWidget {
   const AreaListView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
-      : super(key: key);
+      {super.key, this.mainScreenAnimationController, this.mainScreenAnimation});
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
@@ -54,17 +53,17 @@ class _AreaListViewState extends State<AreaListView>
       stream: _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         if (snapshot.data == null || snapshot.data!.data() == null) {
-          return Center(
+          return const Center(
             child: Text('No Ingredients Selected'),
           );
         }
 
         final ingredients = snapshot.data!.data()!['Ingredients'] as List<dynamic>;
         if (ingredients.isEmpty) {
-          return Center(
+          return const Center(
             child: Text('No Ingredients Selected'),
           );
         }
@@ -126,12 +125,12 @@ class _AreaListViewState extends State<AreaListView>
 
 class AreaView extends StatelessWidget {
   const AreaView({
-    Key? key,
+    super.key,
     this.ingredientName,
     this.animationController,
     this.animation,
     this.onRemove,
-  }) : super(key: key);
+  });
 
   final String? ingredientName;
   final AnimationController? animationController;
@@ -150,7 +149,7 @@ class AreaView extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 // color: MixyAppTheme.white,
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [Colors.orange, Colors.deepOrange],
@@ -171,16 +170,16 @@ class AreaView extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         ingredientName!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         )),
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     left: 0,
                     bottom: 0,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         "",
                         style: TextStyle(
@@ -196,8 +195,8 @@ class AreaView extends StatelessWidget {
                     top: 1,
                     child: FloatingActionButton(
                       onPressed: onRemove,
-                      child: Icon(Icons.remove),
                       mini: true,
+                      child: const Icon(Icons.remove),
                     ),
                   ),
                 ],

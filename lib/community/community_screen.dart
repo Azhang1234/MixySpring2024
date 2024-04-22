@@ -7,7 +7,7 @@ import 'package:mixyspring2024/ui_view/workout_view.dart';
 import '../mixy_app_theme.dart';
 
 class CommunityScreen extends StatefulWidget {
-  const CommunityScreen({Key? key, this.animationController}) : super(key: key);
+  const CommunityScreen({super.key, this.animationController});
 
   final AnimationController? animationController;
   @override

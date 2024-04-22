@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mixyspring2024/localJsonBackend_lijun/drink_request_manager.dart';
 import 'package:mixyspring2024/models/ingredients.dart';
-import '../../main.dart';
-import '../mixy_app_theme.dart';
-import '../models/meals_list_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class IngredientSelectView extends StatefulWidget {
   const IngredientSelectView({
-    Key? key,
+    super.key,
     this.mainScreenAnimationController,
     this.mainScreenAnimation,
-  }) : super(key: key);
+  });
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
@@ -63,13 +60,13 @@ class _IngredientSelectViewState extends State<IngredientSelectView>
       stream: getIngredients(),
       builder: (BuildContext context, AsyncSnapshot<List<Ingredient>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
           ingredients = snapshot.data!;
           if (ingredients.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No Available Ingredients Selected'),
             );
           }
@@ -120,11 +117,11 @@ class _IngredientSelectViewState extends State<IngredientSelectView>
 
 class IngredientView extends StatelessWidget {
   const IngredientView({
-    Key? key,
+    super.key,
     required this.animationController,
     required this.animation,
     required this.ingredient,
-  }) : super(key: key);
+  });
 
   final AnimationController animationController;
   final Animation<double> animation;
@@ -180,7 +177,7 @@ Future<void> _addIngredientToCurrentRequest(String value) async {
           child: Transform(
             transform: Matrix4.translationValues(
                 100 * (1.0 - animation.value), 0.0, 0.0),
-            child: Container(
+            child: SizedBox(
               width: 130,
               child: Stack(
                 children: <Widget>[
@@ -190,7 +187,7 @@ Future<void> _addIngredientToCurrentRequest(String value) async {
                     ),
                     elevation: 10,
                     child: Container(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -198,7 +195,7 @@ Future<void> _addIngredientToCurrentRequest(String value) async {
                             child: Center(
                               child: Text(
                                 ingredient.name,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -218,8 +215,8 @@ Future<void> _addIngredientToCurrentRequest(String value) async {
                       onPressed: () {
                         _addIngredientToCurrentRequest(ingredient.name);
                       },
-                      child: Icon(Icons.add),
                       mini: true,
+                      child: const Icon(Icons.add),
                     ),
                   ),
                   Positioned(
@@ -229,8 +226,8 @@ Future<void> _addIngredientToCurrentRequest(String value) async {
                       onPressed: () {
                         _removeIngredientFromAvaialbleIngredients(ingredient.name);
                       },
-                      child: Icon(Icons.remove),
                       mini: true,
+                      child: const Icon(Icons.remove),
                     ),
                   ),
                 ],

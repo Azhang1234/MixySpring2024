@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
@@ -28,9 +24,9 @@ class CurrentDrinkRequest {
   }
   Map<String, dynamic> toJson() {
     return {
-      'Ingredients': this.ingredients,
-      'OptionalPreferences': this.optionalPreferences,
-      'AlcoholStrength': this.alcoholStrength
+      'Ingredients': ingredients,
+      'OptionalPreferences': optionalPreferences,
+      'AlcoholStrength': alcoholStrength
     };
   }
 
@@ -63,10 +59,10 @@ class User {
   }
   Map<String, dynamic> toJson() {
     return {
-      'Name': this.name,
-      'Id': this.id,
-      'Bio': this.bio,
-      'ImageUrl': this.imageUrl,
+      'Name': name,
+      'Id': id,
+      'Bio': bio,
+      'ImageUrl': imageUrl,
     };
   }
 
@@ -96,12 +92,12 @@ class Drink {
   });
   Map<String, dynamic> toJson() {
     return {
-      'Name': this.name,
-      'TimeCreated': this.timeCreated,
-      'Favorite': this.favorite,
-      'Instructions': this.instructions,
-      'Equipments': this.equipments,
-      'Ingredients': this.ingredients,
+      'Name': name,
+      'TimeCreated': timeCreated,
+      'Favorite': favorite,
+      'Instructions': instructions,
+      'Equipments': equipments,
+      'Ingredients': ingredients,
     };
   }
 
@@ -274,7 +270,7 @@ class DataManager {
     } catch (e) {
       print('Error updating info: $e');
       // You might want to throw the error to be handled by the calling function
-      throw e;
+      rethrow;
     }
   }
 }

@@ -8,7 +8,7 @@ import '../localJsonBackend_lijun/drink_request_manager.dart';
 class DrinkDetailScreen extends StatefulWidget {
   final Drink drink;
 
-  const DrinkDetailScreen({Key? key, required this.drink}) : super(key: key);
+  const DrinkDetailScreen({super.key, required this.drink});
 
   @override
   _DrinkDetailScreenState createState() => _DrinkDetailScreenState();
@@ -96,12 +96,12 @@ class _DrinkDetailScreenState extends State<DrinkDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Ingredients:', style: Theme.of(context).textTheme.headline6),
+            Text('Ingredients:', style: Theme.of(context).textTheme.titleLarge),
             ...widget.drink.ingredients
                 .map((ingredient) => Text('- $ingredient'))
-                .toList(),
-            SizedBox(height: 20),
-            Text('Instructions:', style: Theme.of(context).textTheme.headline6),
+                ,
+            const SizedBox(height: 20),
+            Text('Instructions:', style: Theme.of(context).textTheme.titleLarge),
             ...List<Widget>.generate(steps.length, (index) {
               return CheckboxListTile(
                 title: Text(steps[index].trim()),
@@ -114,17 +114,17 @@ class _DrinkDetailScreenState extends State<DrinkDetailScreen> {
                 controlAffinity: ListTileControlAffinity.leading,
               );
             }),
-            SizedBox(height: 20),
-            Text('Equipment:', style: Theme.of(context).textTheme.headline6),
+            const SizedBox(height: 20),
+            Text('Equipment:', style: Theme.of(context).textTheme.titleLarge),
             ...widget.drink.equipments
                 .map((equipment) => Text('- $equipment'))
-                .toList(),
+                ,
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
         onPressed: toggleFavorite,
+        child: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
       ),
     );
   }

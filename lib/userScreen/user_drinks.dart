@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 import '../add_button/drink_detail_page.dart';
 import '../localJsonBackend_lijun/drink_request_manager.dart';
 import '../mixy_app_theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:flutter/material.dart';
-import '../mixy_app_theme.dart';
 
 class AreaListView extends StatefulWidget {
   const AreaListView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
-      : super(key: key);
+      {super.key, this.mainScreenAnimationController, this.mainScreenAnimation});
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
@@ -110,13 +105,13 @@ class _AreaListViewState extends State<AreaListView>
 
 class AreaView extends StatelessWidget {
   const AreaView({
-    Key? key,
+    super.key,
     required this.animationController,
     required this.animation,
     required this.name,
     required this.favorite,
     required this.drink,
-  }) : super(key: key);
+  });
 
   final AnimationController? animationController;
   final Animation<double>? animation;
@@ -165,7 +160,7 @@ class AreaView extends StatelessWidget {
                         left: 10,
                         child: Text(
                           name,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

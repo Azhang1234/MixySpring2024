@@ -23,7 +23,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  MyApp({super.key});
   final FirebaseAuth _auth =
       FirebaseAuth.instance; // Create FirebaseAuth instance
   final FirebaseFirestore _firestore =
@@ -52,13 +52,13 @@ class MyApp extends StatelessWidget {
               storeUserId(snapshot.data!.uid);
               return const MixyAppHomeScreen();
             } else {
-              return SignInScreen();
+              return const SignInScreen();
             }
           }
         },
       ),
       routes: {
-        '/signup': (context) => SignupScreen(),
+        '/signup': (context) => const SignupScreen(),
         '/home': (context) => const MixyAppHomeScreen(),
       },
     );

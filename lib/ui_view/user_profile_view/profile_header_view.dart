@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
-import '../../mixy_app_theme.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as Path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'dart:typed_data';
 
 class ProfileHeaderView extends StatefulWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
   // String imageUrl;
 
-  ProfileHeaderView({
-    Key? key,
+  const ProfileHeaderView({
+    super.key,
     this.animationController,
     this.animation,
     // required this.imageUrl,
-  }) : super(key: key);
+  });
 
   @override
   _ProfileHeaderViewState createState() => _ProfileHeaderViewState();
@@ -55,16 +52,16 @@ class _ProfileHeaderViewState extends State<ProfileHeaderView> {
   }
 
   Future<void> _uploadProfilePicture() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     // Pick an image
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
       final File file = File(image.path);
 
       // Upload the image to Firebase Storage
       var snapshot = await FirebaseStorage.instance
-          .ref('user_images/${userId}')
+          .ref('user_images/$userId')
           .putFile(file);
       String downloadUrl = await snapshot.ref.getDownloadURL();
       print("DownloadUrl: $downloadUrl");
@@ -100,7 +97,7 @@ class _ProfileHeaderViewState extends State<ProfileHeaderView> {
       child: Column(
         children: [
           SizedBox(height: MediaQuery.of(context).padding.top),
-          Container(
+          SizedBox(
             height: 150,
             child: Center(
               child: GestureDetector(

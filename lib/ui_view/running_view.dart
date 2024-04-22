@@ -5,8 +5,7 @@ class RunningView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  const RunningView({Key? key, this.animationController, this.animation})
-      : super(key: key);
+  const RunningView({super.key, this.animationController, this.animation});
 
   @override
   Widget build(BuildContext context) {

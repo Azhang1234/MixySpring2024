@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'mixy_app_home_screen.dart';
 
 class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -21,7 +23,7 @@ class _SignupScreenState extends State<SignupScreen> {
       );
       if (userCredential.user != null) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => MixyAppHomeScreen()),
+        MaterialPageRoute(builder: (context) => const MixyAppHomeScreen()),
       );
     }
     } on FirebaseAuthException catch (e) {
@@ -39,7 +41,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Signup'),
+        title: const Text('Signup'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -47,20 +49,20 @@ class _SignupScreenState extends State<SignupScreen> {
           children: <Widget>[
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
               ),
             ),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
               ),
               obscureText: true,
             ),
             ElevatedButton(
               onPressed: () => _signup(_emailController.text, _passwordController.text),
-              child: Text('Signup'),
+              child: const Text('Signup'),
             ),
           ],
         ),
