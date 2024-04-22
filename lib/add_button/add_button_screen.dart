@@ -172,9 +172,9 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
     listViews.add(
       TitleView(
-        titleTxt: 'Generate a Mixy Drink!',
+        titleTxt: 'Generate a Mixy Drink:',
         // subTxt: 'more',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        animation: Tween<double>(begin: 0.2, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval((1 / count) * 4, 1.0,
                 curve: Curves.fastOutSlowIn))),
@@ -186,11 +186,19 @@ class _AddButtonScreenState extends State<AddButtonScreen>
     // CallGPT() is called when the button is pressed
     // a NewScreen is pushed onto the Navigator stack, which shiould show the drink(s) reccomended
     listViews.add(
-      Container(
-        width: 220, // increased size to accommodate margin
-        height: 220,
-        margin: const EdgeInsets.all(
-            20.0), // adds pixels of space around the Container
+      FadeTransition(
+        opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: widget.animationController!, // Use your existing controller
+            curve: Curves.fastOutSlowIn, // This curve controls the animation's pace
+          ),
+        ),
+      child: Container(
+        width: 180, // increased size to accommodate margin
+        height: 180,
+        margin: const EdgeInsets.all(20.0), // adds pixels of space around the Container
+        child: ClipRRect( // Added ClipRRect to clip the ink effect within the rounded borders
+      borderRadius: BorderRadius.circular(20.0), // Match this with the container's borderRadius
         child: InkWell(
           onTap: () async {
             print("GPT Called");
@@ -215,7 +223,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
           },
           child: Ink(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(60),
               image: DecorationImage(
                 image: AssetImage('assets/mixy_app/Mix_it_Up.png'),
                 fit: BoxFit.cover,
@@ -232,6 +240,8 @@ class _AddButtonScreenState extends State<AddButtonScreen>
             ),
           ),
         ),
+      ),
+      ),
       ),
     );
   }
