@@ -7,7 +7,7 @@ import 'package:mixyspring2024/ui_view/workout_view.dart';
 import '../mixy_app_theme.dart';
 
 class MixingScreen extends StatefulWidget {
-  const MixingScreen({Key? key, this.animationController}) : super(key: key);
+  const MixingScreen({super.key, this.animationController});
 
   final AnimationController? animationController;
   @override

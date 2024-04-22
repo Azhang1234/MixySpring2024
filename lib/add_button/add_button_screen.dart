@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mixyspring2024/gpt_lijun/getRecomd.dart';
+import 'package:mixyspring2024/gpt/getRecomd.dart';
 import 'package:mixyspring2024/ui_view/add_button_view.dart';
 import 'package:mixyspring2024/ui_view/running_view.dart';
 import 'package:mixyspring2024/ui_view/title_view.dart';

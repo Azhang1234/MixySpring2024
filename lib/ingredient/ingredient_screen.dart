@@ -4,9 +4,9 @@ import 'package:mixyspring2024/mixy_app_theme.dart';
 import 'package:mixyspring2024/ui_view/body_measurement.dart';
 import 'package:mixyspring2024/ui_view/mediterranean_diet_view.dart';
 
-import '../ui_view/Ingredient_ui_lijun/search_bar_view.dart';
-import '../ui_view/Ingredient_ui_lijun/title_view.dart';
-import '../ui_view/Ingredient_ui_lijun/area_list_view.dart';
+import '../ui_view/Ingredient_ui/search_bar_view.dart';
+import '../ui_view/Ingredient_ui/title_view.dart';
+import '../ui_view/Ingredient_ui/area_list_view.dart';
 import 'meals_list_view.dart';
 import '../models/ingredients.dart';
 

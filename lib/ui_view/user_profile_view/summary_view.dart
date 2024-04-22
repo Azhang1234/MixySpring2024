@@ -1,19 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../localJsonBackend_lijun/drink_request_manager.dart';
-import '../../mixy_app_theme.dart'; // Ensure this import is correct for your theme data
-import 'package:firebase_auth/firebase_auth.dart' as auth;
+// Ensure this import is correct for your theme data
 
 class SummaryView extends StatefulWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  SummaryView({
-    Key? key,
+  const SummaryView({
+    super.key,
     this.animationController,
     this.animation,
     // required this.imageUrl,
-  }) : super(key: key);
+  });
   @override
   _SummaryViewState createState() => _SummaryViewState();
 }
@@ -21,7 +19,7 @@ class SummaryView extends StatefulWidget {
 class _SummaryViewState extends State<SummaryView> {
   String summaryText = '';
   DataManager dataManager = DataManager();
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -60,7 +58,7 @@ class _SummaryViewState extends State<SummaryView> {
           padding: const EdgeInsets.all(16.0),
           child: TextField(
             controller: _controller,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Tap to edit summary',
             ),
             onSubmitted: (value) {
@@ -77,21 +75,21 @@ class _SummaryViewState extends State<SummaryView> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Summary'),
+          title: const Text('Edit Summary'),
           content: TextField(
             controller: _controller,
             autofocus: true,
-            decoration: InputDecoration(hintText: 'Enter new summary'),
+            decoration: const InputDecoration(hintText: 'Enter new summary'),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Save'),
+              child: const Text('Save'),
               onPressed: () {
                 // When the user saves their edits, update Firestore
                 _updateInfo();

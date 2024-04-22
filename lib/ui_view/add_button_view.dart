@@ -5,8 +5,7 @@ import '../mixy_app_theme.dart';
 
 class AddButtonView extends StatefulWidget {
   const AddButtonView(
-      {Key? key, this.mainScreenAnimationController, this.mainScreenAnimation})
-      : super(key: key);
+      {super.key, this.mainScreenAnimationController, this.mainScreenAnimation});
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
@@ -170,7 +169,7 @@ class _AddButtonViewState extends State<AddButtonView>
 
 class AreaView extends StatelessWidget {
   const AreaView({
-    Key? key,
+    super.key,
     this.imagepath,
     this.animationController,
     this.animation,
@@ -178,7 +177,7 @@ class AreaView extends StatelessWidget {
     required this.isToggled,
     this.onToggle,
     required this.buttonText,
-  }) : super(key: key);
+  });
 
   final String? imagepath;
   final AnimationController? animationController;

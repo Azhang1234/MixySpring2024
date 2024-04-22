@@ -7,8 +7,7 @@ class FollowersFollowingView extends StatelessWidget {
   final Animation<double>? animation;
 
   const FollowersFollowingView(
-      {Key? key, this.animationController, this.animation})
-      : super(key: key);
+      {super.key, this.animationController, this.animation});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class FollowersFollowingView extends StatelessWidget {
         // Placeholder for followers/following UI
         height: 100, // Example height
         color: Colors.yellow, // Example color
-        child: Center(
+        child: const Center(
           child: Text("Followers & Following View"),
         ),
       ),

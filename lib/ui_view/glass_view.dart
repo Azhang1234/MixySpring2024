@@ -7,8 +7,7 @@ class GlassView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  const GlassView({Key? key, this.animationController, this.animation})
-      : super(key: key);
+  const GlassView({super.key, this.animationController, this.animation});
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(

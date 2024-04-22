@@ -5,6 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
 class ProfileUpdatePage extends StatefulWidget {
+  const ProfileUpdatePage({super.key});
+
   @override
   _ProfileUpdatePageState createState() => _ProfileUpdatePageState();
 }
@@ -52,7 +54,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Profile'),
+        title: const Text('Update Profile'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -62,19 +64,19 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
             TextField(
               controller: TextEditingController(
                   text: _bio), // Initialize the text field with current bio
-              decoration: InputDecoration(labelText: 'Bio'),
+              decoration: const InputDecoration(labelText: 'Bio'),
               onChanged: (value) {
                 _bio = value;
               },
             ),
-            SizedBox(height: 20), // Add some space
+            const SizedBox(height: 20), // Add some space
             ElevatedButton(
               onPressed: () async {
                 // Assuming we're writing the updated bio back to the mockUser.json file for simulation
                 await writeUserData(_bio);
                 Navigator.of(context).pop(); // Go back to the previous screen
               },
-              child: Text('Update Profile'),
+              child: const Text('Update Profile'),
             ),
           ],
         ),

@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../mixy_app_theme.dart';
 
-class AreaListView extends StatefulWidget {
-  const AreaListView(
+class ShakeItUpListView extends StatefulWidget {
+  const ShakeItUpListView(
       {super.key, this.mainScreenAnimationController, this.mainScreenAnimation});
 
   final AnimationController? mainScreenAnimationController;
   final Animation<double>? mainScreenAnimation;
   @override
-  _AreaListViewState createState() => _AreaListViewState();
+  _ShakeItUpViewState createState() => _ShakeItUpViewState();
 }
 
-class _AreaListViewState extends State<AreaListView>
+class _ShakeItUpViewState extends State<ShakeItUpListView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
   List<String> areaListData = <String>[
-    'assets/mixy_app/mixyLogo.png',
-    'assets/mixy_app/mixyLogo.png',
-    'assets/mixy_app/mixyLogo.png',
-    'assets/mixy_app/mixyLogo.png',
+    'assets/mixy_app/resized_lilbill.png'
   ];
 
   @override
@@ -49,41 +46,51 @@ class _AreaListViewState extends State<AreaListView>
               aspectRatio: 1.0,
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: GridView(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 16, bottom: 16),
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 24.0,
-                    crossAxisSpacing: 24.0,
-                    childAspectRatio: 1.0,
+               child: Container(
+  width: 200,
+  height: 200,
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.red, width: 2), // Visual debugging
+  ),
+                child: SizedBox(width: 100, height: 100,
+                  child: GridView(
+                    padding: const EdgeInsets.only(
+                        left: 50, right: 50, top: 50, bottom: 50),
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1, // changed from 3 to 1
+                      mainAxisSpacing: 100.0,
+                      crossAxisSpacing: 25.0,
+                      childAspectRatio: 1.0,
+                    ),
+                    children: List<Widget>.generate(
+                      areaListData.length,
+                      (int index) {
+                        final int count = areaListData.length;
+                        final Animation<double> animation =
+                            Tween<double>(begin: 0.0, end: 1.0).animate(
+                          CurvedAnimation(
+                            parent: animationController!,
+                            curve: Interval((1 / count) * index, 1.0,
+                                curve: Curves.fastOutSlowIn),
+                          ),
+                        );
+                        animationController?.forward();
+                        return AreaView(
+                          imagepath: areaListData[index],
+                          animation: animation,
+                          animationController: animationController!,
+                          index: index,
+                        );
+                      },
+                    ),
                   ),
-                  children: List<Widget>.generate(
-                    areaListData.length,
-                    (int index) {
-                      final int count = areaListData.length;
-                      final Animation<double> animation =
-                          Tween<double>(begin: 0.0, end: 1.0).animate(
-                        CurvedAnimation(
-                          parent: animationController!,
-                          curve: Interval((1 / count) * index, 1.0,
-                              curve: Curves.fastOutSlowIn),
-                        ),
-                      );
-                      animationController?.forward();
-                      return AreaView(
-                        imagepath: areaListData[index],
-                        animation: animation,
-                        animationController: animationController!,
-                      );
-                    },
-                  ),
-                ),
               ),
             ),
           ),
+          ), // changed
+        ),
         );
       },
     );
@@ -96,11 +103,13 @@ class AreaView extends StatelessWidget {
     this.imagepath,
     this.animationController,
     this.animation,
+    required this.index,
   });
 
   final String? imagepath;
   final AnimationController? animationController;
   final Animation<double>? animation;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +144,7 @@ class AreaView extends StatelessWidget {
                   hoverColor: Colors.transparent,
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   splashColor: MixyAppTheme.nearlyDarkBlue.withOpacity(0.2),
-                  onTap: () {
-                    print('Test2');
-                  },
+                  onTap: () {print('Item $index was tapped!');},
                   child: Column(
                     children: <Widget>[
                       Padding(
@@ -156,3 +163,4 @@ class AreaView extends StatelessWidget {
     );
   }
 }
+

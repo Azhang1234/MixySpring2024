@@ -6,7 +6,7 @@ import 'package:vector_math/vector_math.dart' as vector;
 class WaveView extends StatefulWidget {
   final double percentageValue;
 
-  const WaveView({Key? key, this.percentageValue = 100.0}) : super(key: key);
+  const WaveView({super.key, this.percentageValue = 100.0});
   @override
   _WaveViewState createState() => _WaveViewState();
 }
