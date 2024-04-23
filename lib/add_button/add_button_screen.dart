@@ -324,6 +324,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
       ingredients: currentDrinkRequest.ingredients,
       optionalPreferences: currentDrinkRequest.optionalPreferences,
       alcoholStrength: currentDrinkRequest.alcoholStrength,
+      userInfo: await dataManager.getInfo(),
     );
     print("the cocktailRecommendation is $cocktailRecommendation");
     //store into local json file
