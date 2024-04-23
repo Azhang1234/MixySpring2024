@@ -6,8 +6,7 @@ class WorkoutView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  const WorkoutView({Key? key, this.animationController, this.animation})
-      : super(key: key);
+  const WorkoutView({super.key, this.animationController, this.animation});
 
   @override
   Widget build(BuildContext context) {

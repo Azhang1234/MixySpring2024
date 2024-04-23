@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'bottom_navigation_view/bottom_bar_view.dart';
 import 'mixy_app_theme.dart';
 import 'models/tabIcon_data.dart';
-import 'ingredient_lijun/ingredient_screen.dart';
+import 'ingredient/ingredient_screen.dart';
 import 'mixing/mixing_screen.dart';
 import 'community/community_screen.dart';
-import 'userScreen_lijun/user_profile_screen.dart';
+import 'userScreen/user_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'add_button/add_button_screen.dart';
 

@@ -6,8 +6,7 @@ class BodyMeasurementView extends StatelessWidget {
   final Animation<double>? animation;
 
   const BodyMeasurementView(
-      {Key? key, this.animationController, this.animation})
-      : super(key: key);
+      {super.key, this.animationController, this.animation});
 
   @override
   Widget build(BuildContext context) {
