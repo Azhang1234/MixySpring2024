@@ -33,7 +33,7 @@ class _AddButtonViewState extends State<AddButtonView>
   List<String> buttonTextData = <String>[
     'Sweet',
     'Sour',
-    'Non-alcoholic',
+    'Bitter',
     'Low   ABV',
     'Medium ABV',
     'High ABV',
@@ -112,7 +112,8 @@ class _AddButtonViewState extends State<AddButtonView>
                               for (int i = 0; i <= 2; i++) {
                                 toggleStates[i] = false;
                               }
-                            } else if (index >= 3 && index <= 5) {
+                            }
+                            else if (index >= 3 && index <= 5) {
                               for (int i = 3; i <= 5; i++) {
                                 toggleStates[i] = false;
                               }
@@ -132,7 +133,7 @@ class _AddButtonViewState extends State<AddButtonView>
                               }, SetOptions(merge: true));
                             } else if (toggleStates[2] == true){
                               _firestore.collection('Users').doc(userId).collection('CurrentDrinkRequests').doc(userId).set({
-                                'OptionalPreferences': 'Non-Alcohlic'
+                                'OptionalPreferences': 'Bitter'
                               }, SetOptions(merge: true));
                             }
 
