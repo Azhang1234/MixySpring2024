@@ -161,6 +161,10 @@ class _BottomBarViewState extends State<BottomBarView>
                           splashColor: Colors.white.withOpacity(0.1),
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
+                          // onTap: () {
+                          //   print('testing!!!');
+                          //   widget.addClick;
+                          //   },
                           onTap: widget.addClick,
                           child: const Icon(
                             Icons.add,

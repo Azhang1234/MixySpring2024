@@ -86,13 +86,20 @@ class _MixyAppHomeScreenState extends State<MixyAppHomeScreen>
         BottomBarView(
           tabIconsList: tabIconsList,
           addClick: () {
+
+            for (int i = 0; i < tabIconsList.length; i++) {
+              tabIconsList[i].isSelected = false;
+            }
+
+            tabIconsList[2].isSelected = true;
+
             animationController?.reverse().then<dynamic>((data) {
               if (!mounted) {
                 return;
               }
+              
               setState(() {
-                tabBody =
-                    AddButtonScreen(animationController: animationController);
+                tabBody = AddButtonScreen(animationController: animationController);
               });
             });
           },

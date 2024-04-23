@@ -100,12 +100,14 @@ class _NewScreenState extends State<NewScreen> {
       });
     }
   }
+  
 }
+
 
 class _AddButtonScreenState extends State<AddButtonScreen>
     with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
-
+  
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
