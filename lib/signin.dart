@@ -14,47 +14,73 @@ class _SignInScreenState extends State<SignInScreen> {
   String _email = '';
   String _password = '';
 
-Future<void> _signIn() async {
-  if (_formKey.currentState!.validate()) {
-    _formKey.currentState!.save();
-    try {
-      await _auth.signInWithEmailAndPassword(email: _email, password: _password);
-    } on FirebaseAuthException catch (e) {
-      print(e.message); // TODO: Show a dialog or a snackbar with the error message
+  Future<void> _signIn() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      try {
+        await _auth.signInWithEmailAndPassword(
+            email: _email, password: _password);
+      } on FirebaseAuthException catch (e) {
+        print(e
+            .message); // TODO: Show a dialog or a snackbar with the error message
+      }
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign In')),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) => value!.isEmpty ? 'Please enter your email' : null,
-                onSaved: (value) => _email = value!,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/mixy_app/loginBackground.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          // Center the form within the container
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center, // Center the form vertically
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      labelStyle: TextStyle(
+                        color: Colors.white, // Make 'Email' text brighter
+                      ),
+                    ),
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter your email' : null,
+                    onSaved: (value) => _email = value!,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      labelStyle: TextStyle(
+                        color: Colors.white, // Make 'Password' text brighter
+                      ),
+                    ),
+                    obscureText: true,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Please enter your password' : null,
+                    onSaved: (value) => _password = value!,
+                  ),
+                  ElevatedButton(
+                    onPressed: _signIn,
+                    child: const Text('Sign In'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pushNamed(context, '/signup'),
+                    child: const Text('Sign Up'),
+                  ),
+                ],
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) => value!.isEmpty ? 'Please enter your password' : null,
-                onSaved: (value) => _password = value!,
-              ),
-              ElevatedButton(
-                onPressed: _signIn,
-                child: const Text('Sign In'),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/signup'),
-                child: const Text('Sign Up'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
