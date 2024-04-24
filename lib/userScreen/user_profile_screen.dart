@@ -74,7 +74,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
     listViews.add(
       TitleView(
         titleTxt: 'Summary',
-        subTxt: 'Instructions',
+        subTxt: '',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval((1 / count) * 4, 1.0,
@@ -100,7 +100,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>
     listViews.add(
       TitleView(
         titleTxt: 'Your Drinks',
-        subTxt: 'Instructions',
+        subTxt: '',
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval((1 / count) * 4, 1.0,

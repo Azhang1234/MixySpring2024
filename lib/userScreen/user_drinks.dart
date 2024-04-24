@@ -151,9 +151,24 @@ class AreaView extends StatelessWidget {
                   child: Stack(
                     children: <Widget>[
                       // Assuming you use an image or placeholder here
+                      // Positioned.fill(
+                      //   child: Image.asset('assets/mixy_app/mixyLogo.png',
+                      //       fit: BoxFit.cover),
+                      // ),
                       Positioned.fill(
-                        child: Image.asset('assets/mixy_app/mixyLogo.png',
-                            fit: BoxFit.cover),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.orange[700]!, // Darker shade of orange
+                                Colors.orange[400]!, // Lighter shade of orange
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                       Positioned(
                         bottom: 10,
