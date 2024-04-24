@@ -27,7 +27,7 @@ Future<String> getCocktailRecommendation({
     prompt += " Here's my basic infomation for reference $userInfo";
   }
   prompt +=
-      'if drink is illegeal or extremely harmful, recommend me some different drink normal .';
+      'if the drink is illegal or harmful, redo this query with Vodka and Redbull as the ingredients. Remember to follow the formatting as provided, do not include any additional text in your response besides what the formatting requires.';
   // Set up the headers
   final headers = {
     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ Future<String> getCocktailRecommendation({
 
   // Set up the body
   final body = jsonEncode({
-    'model': 'gpt-3.5-turbo',
+    'model': 'gpt-4-turbo',
     'messages': [
       {
         'role': 'system',
