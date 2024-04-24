@@ -56,16 +56,20 @@ class _NewScreenState extends State<NewScreen> {
             SizedBox(height: 20),
             Text('Instructions:', style: Theme.of(context).textTheme.headline6),
             ...List<Widget>.generate(steps.length, (index) {
-              return CheckboxListTile(
-                title: Text(steps[index].trim()),
-                value: stepChecklist[index],
-                onChanged: (bool? value) {
-                  setState(() {
-                    stepChecklist[index] = value!;
-                  });
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-              );
+              if (stepChecklist.isNotEmpty) {
+                return CheckboxListTile(
+                  title: Text(steps[index].trim()),
+                  value: stepChecklist[index],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      stepChecklist[index] = value!;
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                );
+              } else {
+                return SizedBox.shrink(); // Return an empty widget if stepChecklist is empty
+              }
             }),
             SizedBox(height: 20),
             Text('Equipment:', style: Theme.of(context).textTheme.headline6),
@@ -210,7 +214,7 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
             // simulate some processing delay
             // EDIT THE DELAY HERE
-            await Future.delayed(Duration(seconds: 2));
+            await Future.delayed(Duration(seconds: 5));
 
             // dimiss dialog
             Navigator.of(context, rootNavigator: true).pop();
