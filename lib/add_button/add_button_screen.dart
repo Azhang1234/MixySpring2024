@@ -100,14 +100,12 @@ class _NewScreenState extends State<NewScreen> {
       });
     }
   }
-  
 }
-
 
 class _AddButtonScreenState extends State<AddButtonScreen>
     with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
-  
+
   List<Widget> listViews = <Widget>[];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
@@ -192,58 +190,65 @@ class _AddButtonScreenState extends State<AddButtonScreen>
         opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!, // Use your existing controller
-            curve: Curves.fastOutSlowIn, // This curve controls the animation's pace
+            curve: Curves
+                .fastOutSlowIn, // This curve controls the animation's pace
           ),
         ),
-      child: Container(
-        width: 180, // increased size to accommodate margin
-        height: 180,
-        margin: const EdgeInsets.all(20.0), // adds pixels of space around the Container
-        child: ClipRRect( // Added ClipRRect to clip the ink effect within the rounded borders
-      borderRadius: BorderRadius.circular(20.0), // Match this with the container's borderRadius
-        child: InkWell(
-          onTap: () async {
-            print("GPT Called");
+        child: Container(
+          width: 180, // increased size to accommodate margin
+          height: 180,
+          margin: const EdgeInsets.all(
+              20.0), // adds pixels of space around the Container
+          child: ClipRRect(
+            // Added ClipRRect to clip the ink effect within the rounded borders
+            borderRadius: BorderRadius.circular(
+                20.0), // Match this with the container's borderRadius
+            child: InkWell(
+              onTap: () async {
+                print("GPT Called");
 
-            // show the loading dialog
-            showLoadingDialog(context);
+                // show the loading dialog
+                showLoadingDialog(context);
 
-            // simulate some processing delay
-            // EDIT THE DELAY HERE
-            await Future.delayed(Duration(seconds: 2));
+                // simulate some processing delay
+                // EDIT THE DELAY HERE
+                await Future.delayed(Duration(seconds: 2));
 
-            // dimiss dialog
-            Navigator.of(context, rootNavigator: true).pop();
+                // dimiss dialog
+                Navigator.of(context, rootNavigator: true).pop();
 
-            // LETTING GPT DO ITS THING (BUT IT COSTS MONEY SO LEAVE IT COMMENTED OUT FOR NOW)
-            final drink = await CallGPT();
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => NewScreen(drink: drink)),
-            );
-          },
-          child: Ink(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(60),
-              image: DecorationImage(
-                image: AssetImage('assets/mixy_app/Mix_it_Up.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Center(
-              child: Text(
-                '',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                // LETTING GPT DO ITS THING (BUT IT COSTS MONEY SO LEAVE IT COMMENTED OUT FOR NOW)
+                final drink = await CallGPT();
+                if (drink.name == "Illegal Drink") {
+                  _showAlert();
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewScreen(drink: drink)),
+                );
+              },
+              child: Ink(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(60),
+                  image: DecorationImage(
+                    image: AssetImage('assets/mixy_app/Mix_it_Up.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    '',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
-      ),
       ),
     );
   }
@@ -326,23 +331,64 @@ class _AddButtonScreenState extends State<AddButtonScreen>
       alcoholStrength: currentDrinkRequest.alcoholStrength,
       userInfo: await dataManager.getInfo(),
     );
+
     print("the cocktailRecommendation is $cocktailRecommendation");
     //store into local json file
     //process the raw string
-    Drink drink = processRawStringToDrink(cocktailRecommendation);
-    dataManager.addDrink(drink);
-    // dataManager.addDrink(drinkData);
-    setState(() {
-      // rebuild UI based on the data you've loaded
-      listViews.clear();
-      addAllListData();
-    });
-    return drink;
+    if (cocktailRecommendation == '') {
+      //pop up window and say it's the ilegal drink
+      return Drink(
+        name: "Illegal Drink",
+        timeCreated: DateTime.now().toIso8601String(),
+        favorite: false,
+        instructions: "Illegal Drink",
+        equipments: ["Standard bar tools"],
+        ingredients: ["Illegal Drink"],
+      );
+    } else {
+      Drink drink = processRawStringToDrink(cocktailRecommendation);
+      dataManager.addDrink(drink);
+      // dataManager.addDrink(drinkData);
+      setState(() {
+        // rebuild UI based on the data you've loaded
+        listViews.clear();
+        addAllListData();
+      });
+      return drink;
+    }
   }
 
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
+  }
+
+  Future<void> _showAlert() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Your condition has been met.'),
+                Text('This is an alert message.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

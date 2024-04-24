@@ -27,7 +27,7 @@ Future<String> getCocktailRecommendation({
     prompt += " Here's my basic infomation for reference $userInfo";
   }
   prompt +=
-      'if drink is illegeal or extremely harmful, recommend me some different drink normal .';
+      'if drink is illegeal or extremely harmful, Do not respond Anything back.';
   // Set up the headers
   final headers = {
     'Content-Type': 'application/json',
