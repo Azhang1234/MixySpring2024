@@ -68,7 +68,7 @@ class DefaultFirebaseOptions {
     projectId: 'mixy2024-5dcf8',
     storageBucket: 'mixy2024-5dcf8.appspot.com',
     iosClientId: '496142997358-sqiv0unh31rj09plduhn00ivaqm91t2q.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mixyDemo',
+    iosBundleId: 'com.purdue.mixyDemo',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -78,6 +78,6 @@ class DefaultFirebaseOptions {
     projectId: 'mixy2024-5dcf8',
     storageBucket: 'mixy2024-5dcf8.appspot.com',
     iosClientId: '496142997358-6m71vi8kfspov65bk782qab01giklq3c.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mixyDemo.RunnerTests',
+    iosBundleId: 'com.purdue.mixyDemo.RunnerTests',
   );
 }

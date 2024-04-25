@@ -1,4 +1,4 @@
-package com.example.mixy
+package com.purdue.mixy
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:496142997358:android:fdaa0cff520c127abc537f",
         "android_client_info": {
-          "package_name": "com.example.mixy"
+          "package_name": "com.purdue.mixy"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "496142997358-6m71vi8kfspov65bk782qab01giklq3c.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.mixyDemo.RunnerTests"
+                "bundle_id": "com.purdue.mixyDemo.RunnerTests"
               }
             }
           ]
