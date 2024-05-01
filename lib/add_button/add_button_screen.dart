@@ -214,13 +214,15 @@ class _AddButtonScreenState extends State<AddButtonScreen>
 
             // simulate some processing delay
             // EDIT THE DELAY HERE
+
+            final drink = await CallGPT();
+
             await Future.delayed(Duration(seconds: 5));
 
             // dimiss dialog
             Navigator.of(context, rootNavigator: true).pop();
 
             // LETTING GPT DO ITS THING (BUT IT COSTS MONEY SO LEAVE IT COMMENTED OUT FOR NOW)
-            final drink = await CallGPT();
 
             Navigator.push(
               context,
